@@ -11,10 +11,12 @@
 
     <ItemGroup>
         <PackageReference Include="Longbow.Tasks" Version="5.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.1" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\BootstrapBlazor.Shared\BootstrapBlazor.Shared.csproj" />
+        <ProjectReference Include="..\Extensions\DataServices\BootstrapBlazor.DataAcces.EntityFrameworkCore\BootstrapBlazor.DataAcces.EntityFrameworkCore.csproj" />
     </ItemGroup>
 
 </Project>

@@ -10,6 +10,8 @@
 using BootstrapBlazor.Components;
 using BootstrapBlazor.Shared.Common;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -585,7 +587,7 @@ namespace BootstrapBlazor.Shared.Pages
         /// </summary>
         [Display(Name = "主键")]
         [AutoGenerateColumn(Ignore = true)]
-        //[Key]
+        [Key]
         //[FreeSql.DataAnnotations.Column(IsIdentity = true)]
         public int Id { get; set; }
 
@@ -654,35 +656,23 @@ namespace BootstrapBlazor.Shared.Pages
         Middel
     }
 
-    ///// <summary>
-    ///// BindItemContext 上下文操作类
-    ///// </summary>
-    //public class BindItemDbContext : DbContext
-    //{
-    //    /// <summary>
-    //    /// 构造函数
-    //    /// </summary>
-    //    /// <param name="options"></param>
-    //    public BindItemDbContext(DbContextOptions<BindItemDbContext> options) : base(options)
-    //    {
+    /// <summary>
+    /// BindItemContext 上下文操作类
+    /// </summary>
+    public class BindItemDbContext : DbContext
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="options"></param>
+        public BindItemDbContext(DbContextOptions<BindItemDbContext> options) : base(options)
+        {
 
-    //    }
+        }
 
-    //    /// <summary>
-    //    /// 
-    //    /// </summary>
-    //    public DbSet<BindItem>? BindItems { get; set; }
-
-    //    /// <summary>
-    //    /// OnModelCreating 方法
-    //    /// </summary>
-    //    /// <param name="modelBuilder"></param>
-    //    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    //    {
-    //        modelBuilder.Entity(delegate (EntityTypeBuilder<BindItem> entity)
-    //        {
-    //            entity.HasKey(e => e.Id);
-    //        });
-    //    }
-    //}
+        /// <summary>
+        /// 
+        /// </summary>
+        public DbSet<BindItem>? BindItems { get; set; }
+    }
 }

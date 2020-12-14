@@ -7,11 +7,11 @@
 // 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
 // **********************************
 
-using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -107,11 +107,11 @@ namespace BootstrapBlazor.Server
 
             // 增加 EFCore ORM 数据服务操作类
             // 需要时打开下面代码
-            //services.AddEntityFrameworkCore<Shared.Pages.BindItemDbContext>(option =>
-            //{
-            //    // 需要引用 Microsoft.EntityFrameworkCore.Sqlite 包，操作 SQLite 数据库
-            //    option.UseSqlite(Configuration.GetConnectionString("bb"));
-            //});
+            services.AddEntityFrameworkCore<Shared.Pages.BindItemDbContext>(option =>
+            {
+                // 需要引用 Microsoft.EntityFrameworkCore.Sqlite 包，操作 SQLite 数据库
+                option.UseSqlite(Configuration.GetConnectionString("bb"));
+            });
 
             // 增加多语言支持配置信息
             services.Configure<RequestLocalizationOptions>(options =>
