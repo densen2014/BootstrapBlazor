@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
+using BootstrapBlazor.Localization.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -9,9 +10,14 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 
 namespace BootstrapBlazor.Server
 {
@@ -65,6 +71,8 @@ namespace BootstrapBlazor.Server
                 // 统一设置 Toast 组件自动消失时间
                 options.ToastDelay = 4000;
             });
+
+            services.AddSingleton<IStringLocalizerFactory, StringLocalizerFactoryFoo>();
 
             // 增加 Table Excel 导出服务
             services.AddBootstrapBlazorTableExcelExport();
@@ -151,6 +159,89 @@ namespace BootstrapBlazor.Server
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+        }
+    }
+
+    internal class StringLocalizerFoo : Microsoft.Extensions.Localization.IStringLocalizer
+    {
+        /// <summary>
+        /// 通过指定键值获取多语言值信息索引
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public LocalizedString this[string name]
+        {
+            get
+            {
+                return new LocalizedString(name, "Test");
+            }
+        }
+
+        /// <summary>
+        /// 带格式化参数的通过指定键值获取多语言值信息索引
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        public LocalizedString this[string name, params object[] arguments]
+        {
+            get
+            {
+                return new LocalizedString(name, "test");
+            }
+        }
+
+        public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
+        {
+            return new LocalizedString[] {
+                new LocalizedString("test", "test")
+            };
+        }
+    }
+
+    internal class StringLocalizerFactoryFoo : IStringLocalizerFactory
+    {
+        private readonly ILoggerFactory _loggerFactory;
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        public StringLocalizerFactoryFoo(ILoggerFactory loggerFactory)
+        {
+            _loggerFactory = loggerFactory;
+        }
+
+        /// <summary>
+        /// 通过资源类型创建 IStringLocalizer 方法
+        /// </summary>
+        /// <param name="resourceSource"></param>
+        /// <returns></returns>
+        public IStringLocalizer Create(Type resourceSource)
+        {
+            return CreateStringLocalizer();
+        }
+
+        /// <summary>
+        /// 通过 baseName 与 location 创建 IStringLocalizer 方法
+        /// </summary>
+        /// <param name="baseName"></param>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        public IStringLocalizer Create(string baseName, string location)
+        {
+            return CreateStringLocalizer();
+        }
+
+        /// <summary>
+        /// 创建 IStringLocalizer 实例方法
+        /// </summary>
+        /// <returns></returns>
+        protected virtual IStringLocalizer CreateStringLocalizer()
+        {
+            var logger = _loggerFactory.CreateLogger<StringLocalizerFoo>();
+
+            return new StringLocalizerFoo();
         }
     }
 }
