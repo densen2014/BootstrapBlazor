@@ -70,6 +70,9 @@ namespace BootstrapBlazor.Server
             {
                 // 统一设置 Toast 组件自动消失时间
                 options.ToastDelay = 4000;
+            }, options =>
+            {
+                // 设置自己的多语言文化资源文件
             });
 
             services.AddSingleton<IStringLocalizerFactory, StringLocalizerFactoryFoo>();
