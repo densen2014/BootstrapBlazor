@@ -25,7 +25,7 @@ namespace BootstrapBlazor.Localization.Json
         private readonly Assembly _assembly;
         private readonly string _typeName;
         private readonly ILogger _logger;
-        private readonly IEnumerable<Stream> _resources;
+        private readonly JsonLocalizationOptions _options;
 
         private string _searchedLocation = "";
 
@@ -35,13 +35,13 @@ namespace BootstrapBlazor.Localization.Json
         /// <param name="assembly"></param>
         /// <param name="typeName"></param>
         /// <param name="logger"></param>
-        /// <param name="streams"></param>
-        public JsonStringLocalizer(Assembly assembly, string typeName, ILogger logger, IEnumerable<Stream>? streams)
+        /// <param name="options"></param>
+        public JsonStringLocalizer(Assembly assembly, string typeName, ILogger logger, JsonLocalizationOptions options)
         {
             _assembly = assembly;
             _typeName = typeName;
             _logger = logger;
-            _resources = streams ?? Enumerable.Empty<Stream>();
+            _options = options;
         }
 
         /// <summary>
@@ -87,14 +87,6 @@ namespace BootstrapBlazor.Localization.Json
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="culture"></param>
-        /// <returns></returns>
-        [Obsolete("This method is obsolete. Use `CurrentCulture` and `CurrentUICulture` instead.")]
-        public IStringLocalizer WithCulture(CultureInfo culture) => this;
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="includeParentCultures"></param>
         /// <param name="culture"></param>
         /// <returns></returns>
@@ -118,29 +110,40 @@ namespace BootstrapBlazor.Localization.Json
         /// <returns></returns>
         protected virtual string? GetStringSafely(string name)
         {
-            var culture = CultureInfo.CurrentUICulture;
             string? value = null;
-
-            while (culture != culture.Parent)
+            if (_options.StringLocalizer != null)
             {
-                BuildResourcesCache(culture);
-
-                if (_resourcesCache.TryGetValue(culture.Name, out var resources))
+                var local = _options.StringLocalizer[name];
+                if (!local.ResourceNotFound)
                 {
-                    var resource = resources?.SingleOrDefault(s => s.Key == name);
-
-                    value = resource?.Value ?? null;
-                    _logger.LogDebug($"{nameof(JsonStringLocalizer)} searched for '{name}' in '{_searchedLocation}' with culture '{culture}'.");
-
-                    if (value != null)
-                    {
-                        break;
-                    }
-
-                    culture = culture.Parent;
+                    value = local.Value;
                 }
             }
 
+            if (string.IsNullOrEmpty(value))
+            {
+                var culture = CultureInfo.CurrentUICulture;
+
+                while (culture != culture.Parent)
+                {
+                    BuildResourcesCache(culture);
+
+                    if (_resourcesCache.TryGetValue(culture.Name, out var resources))
+                    {
+                        var resource = resources?.SingleOrDefault(s => s.Key == name);
+
+                        value = resource?.Value ?? null;
+                        _logger.LogDebug($"{nameof(JsonStringLocalizer)} searched for '{name}' in '{_searchedLocation}' with culture '{culture}'.");
+
+                        if (value != null)
+                        {
+                            break;
+                        }
+
+                        culture = culture.Parent;
+                    }
+                }
+            }
             return value;
         }
 
@@ -189,9 +192,9 @@ namespace BootstrapBlazor.Localization.Json
                 if (res != null)
                 {
                     var builder = new ConfigurationBuilder().AddJsonStream(res);
-                    if (_resources.Any())
+                    if (_options.JsonLocalizationStreams?.Any() ?? false)
                     {
-                        foreach (var r in _resources)
+                        foreach (var r in _options.JsonLocalizationStreams)
                         {
                             builder.AddJsonStream(r);
                         }

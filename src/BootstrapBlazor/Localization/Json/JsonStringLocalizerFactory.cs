@@ -82,8 +82,7 @@ namespace BootstrapBlazor.Localization.Json
         protected virtual IStringLocalizer CreateJsonStringLocalizer(Assembly assembly, string typeName)
         {
             var logger = _loggerFactory.CreateLogger<JsonStringLocalizer>();
-            var streams = _jsonOptions.JsonLocalizationStreams;
-            return new JsonStringLocalizer(assembly, typeName, logger, streams);
+            return new JsonStringLocalizer(assembly, typeName, logger, _jsonOptions);
         }
 
         private static string TryFixInnerClassPath(string path)
