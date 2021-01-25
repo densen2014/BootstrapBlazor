@@ -9,6 +9,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -24,6 +25,7 @@ namespace BootstrapBlazor.Localization.Json
         private readonly Assembly _assembly;
         private readonly string _typeName;
         private readonly ILogger _logger;
+        private readonly IEnumerable<Stream> _resources;
 
         private string _searchedLocation = "";
 
@@ -33,11 +35,13 @@ namespace BootstrapBlazor.Localization.Json
         /// <param name="assembly"></param>
         /// <param name="typeName"></param>
         /// <param name="logger"></param>
-        public JsonStringLocalizer(Assembly assembly, string typeName, ILogger logger)
+        /// <param name="streams"></param>
+        public JsonStringLocalizer(Assembly assembly, string typeName, ILogger logger, IEnumerable<Stream>? streams)
         {
             _assembly = assembly;
             _typeName = typeName;
             _logger = logger;
+            _resources = streams ?? Enumerable.Empty<Stream>();
         }
 
         /// <summary>
@@ -184,9 +188,15 @@ namespace BootstrapBlazor.Localization.Json
 
                 if (res != null)
                 {
-                    var config = new ConfigurationBuilder()
-                        .AddJsonStream(res)
-                        .Build();
+                    var builder = new ConfigurationBuilder().AddJsonStream(res);
+                    if (_resources.Any())
+                    {
+                        foreach (var r in _resources)
+                        {
+                            builder.AddJsonStream(r);
+                        }
+                    }
+                    var config = builder.Build();
                     var v = config.GetChildren().FirstOrDefault(c => _typeName.Equals(c.Key, StringComparison.OrdinalIgnoreCase))?.GetChildren().SelectMany(c => new KeyValuePair<string, string>[] { new KeyValuePair<string, string>(c.Key, c.Value) });
 
                     if (v != null) value = v;

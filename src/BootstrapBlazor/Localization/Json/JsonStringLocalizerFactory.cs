@@ -38,7 +38,7 @@ namespace BootstrapBlazor.Localization.Json
         {
             var typeInfo = resourceSource.GetTypeInfo();
             var typeName = typeInfo.FullName;
-            if (string.IsNullOrEmpty(typeName)) throw new InvalidOperationException($"{nameof(resourceSource)} full name is null.");
+            if (string.IsNullOrEmpty(typeName)) throw new InvalidOperationException($"{nameof(resourceSource)} full name is null or String.Empty.");
 
             if (resourceSource.IsGenericType)
             {
@@ -82,8 +82,8 @@ namespace BootstrapBlazor.Localization.Json
         protected virtual IStringLocalizer CreateJsonStringLocalizer(Assembly assembly, string typeName)
         {
             var logger = _loggerFactory.CreateLogger<JsonStringLocalizer>();
-
-            return new JsonStringLocalizer(assembly, typeName, logger);
+            var streams = _jsonOptions.JsonLocalizationStreams;
+            return new JsonStringLocalizer(assembly, typeName, logger, streams);
         }
 
         private static string TryFixInnerClassPath(string path)

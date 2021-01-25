@@ -3,6 +3,8 @@
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using Microsoft.Extensions.Localization;
+using System.Collections.Generic;
+using System.IO;
 
 namespace BootstrapBlazor.Localization.Json
 {
@@ -11,6 +13,11 @@ namespace BootstrapBlazor.Localization.Json
     /// </summary>
     public class JsonLocalizationOptions : LocalizationOptions
     {
+        /// <summary>
+        /// 获得/设置 本地化资源文件流集合
+        /// </summary>
+        public IEnumerable<Stream>? JsonLocalizationStreams { get; set; }
+
         /// <summary>
         /// 构造方法
         /// </summary>
