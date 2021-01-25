@@ -17,13 +17,5 @@ namespace BootstrapBlazor.Localization.Json
         /// 获得/设置 本地化资源文件流集合
         /// </summary>
         public IEnumerable<Stream>? JsonLocalizationStreams { get; set; }
-
-        /// <summary>
-        /// 构造方法
-        /// </summary>
-        public JsonLocalizationOptions()
-        {
-            ResourcesPath = "Locales";
-        }
     }
 }
