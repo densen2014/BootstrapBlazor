@@ -22,7 +22,6 @@ namespace BootstrapBlazor.Localization.Json
         private readonly ConcurrentDictionary<string, IEnumerable<KeyValuePair<string, string>>> _resourcesCache = new();
 
         private readonly Assembly _assembly;
-        private readonly string? _resourceName;
         private readonly string _typeName;
         private readonly ILogger _logger;
 
@@ -32,14 +31,12 @@ namespace BootstrapBlazor.Localization.Json
         /// 构造函数
         /// </summary>
         /// <param name="assembly"></param>
-        /// <param name="resourceName"></param>
         /// <param name="typeName"></param>
         /// <param name="logger"></param>
-        public JsonStringLocalizer(Assembly assembly, string? resourceName, string typeName, ILogger logger)
+        public JsonStringLocalizer(Assembly assembly, string typeName, ILogger logger)
         {
             _assembly = assembly;
             _typeName = typeName;
-            _resourceName = resourceName;
             _logger = logger;
         }
 
@@ -181,7 +178,7 @@ namespace BootstrapBlazor.Localization.Json
             {
                 var value = Enumerable.Empty<KeyValuePair<string, string>>();
 
-                _searchedLocation = $"{_resourceName}.{key}.json";
+                _searchedLocation = $"{_assembly.GetName().Name}.Locales.{key}.json";
 
                 using var res = _assembly.GetManifestResourceStream(_searchedLocation);
 
