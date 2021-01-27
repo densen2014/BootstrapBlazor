@@ -152,6 +152,7 @@ namespace BootstrapBlazor.Server
             app.UseResponseCompression();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseCors(builder => builder.WithOrigins(Configuration["AllowOrigins"].Split(',', StringSplitOptions.RemoveEmptyEntries)).AllowAnyHeader().AllowAnyMethod().AllowCredentials());
 
             app.UseEndpoints(endpoints =>
             {

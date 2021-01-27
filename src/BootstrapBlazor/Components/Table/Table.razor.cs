@@ -231,7 +231,11 @@ namespace BootstrapBlazor.Components
             OnSortAsync = QueryAsync;
 
             // 设置 OnFilter 回调方法
-            OnFilterAsync = QueryAsync;
+            OnFilterAsync = async () =>
+            {
+                PageIndex = 1;
+                await QueryAsync();
+            };
         }
 
         private string? methodName;
@@ -308,11 +312,15 @@ namespace BootstrapBlazor.Components
                     // 自动刷新功能
                     _ = Task.Run(async () =>
                     {
-                        while (!(AutoRefreshCancelTokenSource?.IsCancellationRequested ?? true))
+                        try
                         {
-                            await InvokeAsync(QueryAsync);
-                            await Task.Delay(AutoRefreshInterval, AutoRefreshCancelTokenSource?.Token ?? new CancellationToken(true));
+                            while (!(AutoRefreshCancelTokenSource?.IsCancellationRequested ?? true))
+                            {
+                                await InvokeAsync(QueryAsync);
+                                await Task.Delay(AutoRefreshInterval, AutoRefreshCancelTokenSource?.Token ?? new CancellationToken(true));
+                            }
                         }
+                        catch (TaskCanceledException) { }
                     });
                 }
             }
