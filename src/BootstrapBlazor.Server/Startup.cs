@@ -72,6 +72,21 @@ namespace BootstrapBlazor.Server
             {
                 // 设置自己的多语言文化资源文件
                 options.StringLocalizer = new ResourceManagerStringLocalizerFactory(options.CreateOptions(), options.LoggerFactory).Create(typeof(Program));
+
+                // 附加自己的多语言文化资源文件
+                options.LocalizerConfigurationFactory = cultureName =>
+                {
+                    var assembly = GetType().Assembly;
+                    var fileName = $"{assembly.GetName().Name}.Locales.{cultureName}.json";
+                    using var res = assembly.GetManifestResourceStream(fileName);
+
+                    var config = new ConfigurationBuilder();
+                    if (res != null)
+                    {
+                        config.AddJsonStream(res);
+                    }
+                    return config.Build();
+                };
             });
 
             // 增加 Table Excel 导出服务
