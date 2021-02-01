@@ -8455,6 +8455,11 @@
             获得/设置 是否为第一次 Render
             </summary>
         </member>
+        <member name="P:BootstrapBlazor.Components.Table`1.IsLoading">
+            <summary>
+            获得/设置 是否正在加载数据 默认为 false
+            </summary>
+        </member>
         <member name="M:BootstrapBlazor.Components.Table`1.OnAfterRenderAsync(System.Boolean)">
             <summary>
             OnAfterRenderAsync 方法
