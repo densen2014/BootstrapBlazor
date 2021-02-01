@@ -4334,6 +4334,33 @@
             获得/设置 Footer 组件中返回顶端按钮控制的滚动条所在组件
             </summary>
         </member>
+        <member name="T:BootstrapBlazor.Components.GoTop">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:BootstrapBlazor.Components.GoTop.Target">
+            <summary>
+            获得/设置 滚动条所在组件
+            </summary>
+        </member>
+        <member name="P:BootstrapBlazor.Components.GoTop.TooltipText">
+            <summary>
+            获得/设置 鼠标悬停提示文字信息
+            </summary>
+        </member>
+        <member name="M:BootstrapBlazor.Components.GoTop.OnInitialized">
+            <summary>
+            OnInitialized 方法
+            </summary>
+        </member>
+        <member name="M:BootstrapBlazor.Components.GoTop.OnAfterRenderAsync(System.Boolean)">
+            <summary>
+            OnAfterRenderAsync 方法
+            </summary>
+            <param name="firstRender"></param>
+            <returns></returns>
+        </member>
         <member name="T:BootstrapBlazor.Components.GroupBox">
             <summary>
             
@@ -4519,33 +4546,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:BootstrapBlazor.Components.GoTop">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:BootstrapBlazor.Components.GoTop.Target">
-            <summary>
-            获得/设置 滚动条所在组件
-            </summary>
-        </member>
-        <member name="P:BootstrapBlazor.Components.GoTop.TooltipText">
-            <summary>
-            获得/设置 鼠标悬停提示文字信息
-            </summary>
-        </member>
-        <member name="M:BootstrapBlazor.Components.GoTop.OnInitialized">
-            <summary>
-            OnInitialized 方法
-            </summary>
-        </member>
-        <member name="M:BootstrapBlazor.Components.GoTop.OnAfterRenderAsync(System.Boolean)">
-            <summary>
-            OnAfterRenderAsync 方法
-            </summary>
-            <param name="firstRender"></param>
-            <returns></returns>
-        </member>
         <member name="T:BootstrapBlazor.Components.Layout">
             <summary>
             
@@ -4610,7 +4610,7 @@
         </member>
         <member name="M:BootstrapBlazor.Components.Layout.SetCollapsed(System.Int32)">
             <summary>
-            设置 请求头方法
+            设置侧边栏收缩方法 客户端监控 window.onresize 事件回调此方法
             </summary>
             <returns></returns>
         </member>
