@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace BootstrapBlazor.Localization.Json
 {
@@ -30,11 +31,16 @@ namespace BootstrapBlazor.Localization.Json
         public Func<string, IConfiguration>? LocalizerConfigurationFactory { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public IEnumerable<Assembly>? AdditionalAssemblies { get; set; }
+
+        /// <summary>
         /// 构造方法
         /// </summary>
         public JsonLocalizationOptions()
         {
-            ResourcesPath = "Resources";
+            ResourcesPath = "Locales";
         }
 
         /// <summary>

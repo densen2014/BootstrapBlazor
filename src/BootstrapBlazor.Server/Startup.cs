@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 
 namespace BootstrapBlazor.Server
 {
@@ -71,22 +72,10 @@ namespace BootstrapBlazor.Server
             }, options =>
             {
                 // 设置自己的 RESX 多语言文化资源文件 如 Program.{CultureName}.resx
-                options.StringLocalizer = options.CreateStringLocalizer<Program>();
+                options.StringLocalizer = options.CreateStringLocalizer<Program>("Resources");
 
                 // 附加自己的 json 多语言文化资源文件 如 zh-TW.json
-                options.LocalizerConfigurationFactory = cultureName =>
-                {
-                    var assembly = GetType().Assembly;
-                    var fileName = $"{assembly.GetName().Name}.Locales.{cultureName}.json";
-                    using var res = assembly.GetManifestResourceStream(fileName);
-
-                    var config = new ConfigurationBuilder();
-                    if (res != null)
-                    {
-                        config.AddJsonStream(res);
-                    }
-                    return config.Build();
-                };
+                options.AdditionalAssemblies = new Assembly[] { GetType().Assembly };
             });
 
             // 增加 Table Excel 导出服务
