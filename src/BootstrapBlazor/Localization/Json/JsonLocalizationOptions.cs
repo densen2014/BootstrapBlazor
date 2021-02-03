@@ -49,9 +49,9 @@ namespace BootstrapBlazor.Localization.Json
         /// <param name="resourcesPath">resx 资源文件路径</param>
         /// <typeparam name="TType"></typeparam>
         /// <returns></returns>
-        public IStringLocalizer CreateStringLocalizer<TType>(string? resourcesPath = null)
+        public IStringLocalizer CreateStringLocalizer<TType>(string resourcesPath = "Resources")
         {
-            var options = Options.Create(new LocalizationOptions() { ResourcesPath = resourcesPath ?? ResourcesPath });
+            var options = Options.Create(new LocalizationOptions() { ResourcesPath = resourcesPath });
             var loggerFactory = ServiceProviderHelper.ServiceProvider.GetRequiredService<ILoggerFactory>();
             return new ResourceManagerStringLocalizerFactory(options, loggerFactory).Create(typeof(TType));
         }

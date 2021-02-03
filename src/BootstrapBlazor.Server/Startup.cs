@@ -72,7 +72,7 @@ namespace BootstrapBlazor.Server
             }, options =>
             {
                 // 设置自己的 RESX 多语言文化资源文件 如 Program.{CultureName}.resx
-                options.StringLocalizer = options.CreateStringLocalizer<Program>("Resources");
+                options.StringLocalizer = options.CreateStringLocalizer<Program>();
 
                 // 附加自己的 json 多语言文化资源文件 如 zh-TW.json
                 options.AdditionalAssemblies = new Assembly[] { GetType().Assembly };
