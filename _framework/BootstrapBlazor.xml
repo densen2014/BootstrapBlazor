@@ -223,11 +223,6 @@
             获得/设置 文件大小 默认为 0 未限制
             </summary>
         </member>
-        <member name="P:BootstrapBlazor.Components.FileValidationAttribute.ResourceType">
-            <summary>
-            获得/设置 资源文件所在程序集 默认使用当前程序集 BootstrapBlazor
-            </summary>
-        </member>
         <member name="M:BootstrapBlazor.Components.FileValidationAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
             <summary>
             是否合规判断方法
@@ -6452,12 +6447,6 @@
             下拉框选项点击时调用此方法
             </summary>
         </member>
-        <member name="M:BootstrapBlazor.Components.SelectBase`1.OnValidate(System.Boolean)">
-            <summary>
-            客户端检查完成时调用此方法
-            </summary>
-            <param name="valid"></param>
-        </member>
         <member name="M:BootstrapBlazor.Components.SelectBase`1.GetItems">
             <summary>
             获得 数据源
@@ -12641,24 +12630,19 @@
             LocalizationOptions 配置类
             </summary>
         </member>
-        <member name="P:BootstrapBlazor.Localization.Json.JsonLocalizationOptions.JsonLocalizationStreams">
-            <summary>
-            获得/设置 本地化资源文件流集合 默认为空
-            </summary>
-        </member>
         <member name="P:BootstrapBlazor.Localization.Json.JsonLocalizationOptions.StringLocalizer">
             <summary>
             获得/设置 自定义 IStringLocalizer 接口 默认为空
             </summary>
         </member>
-        <member name="P:BootstrapBlazor.Localization.Json.JsonLocalizationOptions.LocalizerConfigurationFactory">
+        <member name="P:BootstrapBlazor.Localization.Json.JsonLocalizationOptions.AdditionalAssemblies">
             <summary>
-            获得/设置 自定义 Json 格式资源流集合
+            获得/设置 外置资源文件程序集集合
             </summary>
         </member>
-        <member name="P:BootstrapBlazor.Localization.Json.JsonLocalizationOptions.LoggerFactory">
+        <member name="P:BootstrapBlazor.Localization.Json.JsonLocalizationOptions.AdditionalJsonFiles">
             <summary>
-            获得/设置 LoggerFactory 实例
+            获得/设置 外置资源文件路径集合
             </summary>
         </member>
         <member name="M:BootstrapBlazor.Localization.Json.JsonLocalizationOptions.#ctor">
@@ -12666,11 +12650,12 @@
             构造方法
             </summary>
         </member>
-        <member name="M:BootstrapBlazor.Localization.Json.JsonLocalizationOptions.CreateOptions(System.String)">
+        <member name="M:BootstrapBlazor.Localization.Json.JsonLocalizationOptions.CreateStringLocalizer``1(System.String)">
             <summary>
-            创建 IOptions 示例方法
+            创建 IStringLocalizer 实例方法
             </summary>
-            <param name="resourcesPath"></param>
+            <param name="resourcesPath">resx 资源文件路径 默认为 Resources</param>
+            <typeparam name="TType"></typeparam>
             <returns></returns>
         </member>
         <member name="T:BootstrapBlazor.Localization.Json.JsonStringLocalizer">
@@ -12757,6 +12742,19 @@
             </summary>
             <param name="assembly"></param>
             <param name="typeName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BootstrapBlazor.Localization.Json.JsonStringLocalizerFactory.CreateLocalizer``1">
+            <summary>
+            通过指定类型创建 IStringLocalizer 实例
+            </summary>
+            <typeparam name="TType"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:BootstrapBlazor.Localization.Json.JsonStringLocalizerFactory.CreateLocalizer(System.Type)">
+            <summary>
+            通过指定类型创建 IStringLocalizer 实例
+            </summary>
             <returns></returns>
         </member>
         <member name="T:BootstrapBlazor.Localization.Json.LocalizedHtmlString">
