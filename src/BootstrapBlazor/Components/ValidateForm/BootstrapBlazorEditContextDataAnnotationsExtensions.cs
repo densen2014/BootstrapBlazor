@@ -136,14 +136,18 @@ namespace BootstrapBlazor.Components
                 {
                     if (!rule.IsValid(value))
                     {
-                        if (TryGetLocalizer(context.ObjectType, $"{memberName}.Display", out var dn))
+                        if (!string.IsNullOrEmpty(displayName) && TryGetLocalizer(context.ObjectType, displayName, out var d))
+                        {
+                            displayName = d;
+                        }
+                        else if (TryGetLocalizer(context.ObjectType, $"{memberName}.Display", out var dn))
                         {
                             displayName = dn;
                         }
                         var ruleNameSpan = rule.GetType().Name.AsSpan();
                         var index = ruleNameSpan.IndexOf(attributeSpan, StringComparison.OrdinalIgnoreCase);
                         var ruleName = rule.GetType().Name.AsSpan().Slice(0, index);
-                        if(!string.IsNullOrEmpty(rule.ErrorMessage) && TryGetLocalizer(context.ObjectType, rule.ErrorMessage, out var resx))
+                        if (!string.IsNullOrEmpty(rule.ErrorMessage) && TryGetLocalizer(context.ObjectType, rule.ErrorMessage, out var resx))
                         {
                             rule.ErrorMessage = resx;
                         }
