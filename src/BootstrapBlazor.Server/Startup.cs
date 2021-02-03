@@ -77,6 +77,12 @@ namespace BootstrapBlazor.Server
 
                 // 附加自己的 json 多语言文化资源文件 如 zh-TW.json
                 options.AdditionalAssemblies = new Assembly[] { GetType().Assembly };
+
+                options.AdditionalJsonFiles = new string[]
+                {
+                    @"D:\Argo\src\BootstrapBlazor\src\BootstrapBlazor.Server\Locales\zh-TW.json",
+                    @"D:\Argo\src\BootstrapBlazor\src\BootstrapBlazor.Server\Locales\zh-CN.json"
+                };
             });
 
             // 增加 Table Excel 导出服务
