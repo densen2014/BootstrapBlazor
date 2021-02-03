@@ -105,13 +105,13 @@ namespace BootstrapBlazor.Localization.Json
         /// </summary>
         /// <typeparam name="TType"></typeparam>
         /// <returns></returns>
-        public static IStringLocalizer Create<TType>() => CreateByType(typeof(TType));
+        public static IStringLocalizer CreateLocalizer<TType>() => CreateLocalizer(typeof(TType));
 
         /// <summary>
         /// 通过指定类型创建 IStringLocalizer 实例
         /// </summary>
         /// <returns></returns>
-        public static IStringLocalizer CreateByType(Type type)
+        public static IStringLocalizer CreateLocalizer(Type type)
         {
             var options = ServiceProviderHelper.ServiceProvider.GetRequiredService<IOptions<JsonLocalizationOptions>>();
             var loggerFactory = ServiceProviderHelper.ServiceProvider.GetRequiredService<ILoggerFactory>();

@@ -23,7 +23,7 @@ namespace BootstrapBlazor.Components
         /// </summary>
         public FileValidationAttribute()
         {
-            Localizer = JsonStringLocalizerFactory.Create<Upload>();
+            Localizer = JsonStringLocalizerFactory.CreateLocalizer<Upload>();
         }
 
         private IStringLocalizer Localizer { get; }
