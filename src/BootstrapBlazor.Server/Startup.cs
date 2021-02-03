@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
+using BootstrapBlazor.Localization.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -72,7 +73,7 @@ namespace BootstrapBlazor.Server
             }, options =>
             {
                 // 设置自己的 RESX 多语言文化资源文件 如 Program.{CultureName}.resx
-                options.StringLocalizer = options.CreateStringLocalizer<Program>();
+                options.StringLocalizer = JsonLocalizationOptions.CreateStringLocalizer<Program>();
 
                 // 附加自己的 json 多语言文化资源文件 如 zh-TW.json
                 options.AdditionalAssemblies = new Assembly[] { GetType().Assembly };

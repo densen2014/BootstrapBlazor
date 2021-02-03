@@ -36,12 +36,12 @@ namespace BootstrapBlazor.Localization.Json
         }
 
         /// <summary>
-        /// 
+        /// 创建 IStringLocalizer 实例方法
         /// </summary>
-        /// <param name="resourcesPath">resx 资源文件路径</param>
+        /// <param name="resourcesPath">resx 资源文件路径 默认为 Resources</param>
         /// <typeparam name="TType"></typeparam>
         /// <returns></returns>
-        public IStringLocalizer CreateStringLocalizer<TType>(string resourcesPath = "Resources")
+        public static IStringLocalizer CreateStringLocalizer<TType>(string resourcesPath = "Resources")
         {
             var options = Options.Create(new LocalizationOptions() { ResourcesPath = resourcesPath });
             var loggerFactory = ServiceProviderHelper.ServiceProvider.GetRequiredService<ILoggerFactory>();
