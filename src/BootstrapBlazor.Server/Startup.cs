@@ -70,10 +70,10 @@ namespace BootstrapBlazor.Server
                 options.ToastDelay = 4000;
             }, options =>
             {
-                // 设置自己的多语言文化资源文件
-                options.StringLocalizer = new ResourceManagerStringLocalizerFactory(options.CreateOptions(), options.LoggerFactory).Create(typeof(Program));
+                // 设置自己的 RESX 多语言文化资源文件 如 Program.{CultureName}.resx
+                options.StringLocalizer = options.CreateStringLocalizer<Program>();
 
-                // 附加自己的多语言文化资源文件
+                // 附加自己的 json 多语言文化资源文件 如 zh-TW.json
                 options.LocalizerConfigurationFactory = cultureName =>
                 {
                     var assembly = GetType().Assembly;

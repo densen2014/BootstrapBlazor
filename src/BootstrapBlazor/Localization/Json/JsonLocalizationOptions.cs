@@ -20,11 +20,6 @@ namespace BootstrapBlazor.Localization.Json
     public class JsonLocalizationOptions : LocalizationOptions
     {
         /// <summary>
-        /// 获得/设置 本地化资源文件流集合 默认为空
-        /// </summary>
-        public IEnumerable<Stream>? JsonLocalizationStreams { get; set; }
-
-        /// <summary>
         /// 获得/设置 自定义 IStringLocalizer 接口 默认为空
         /// </summary>
         public IStringLocalizer? StringLocalizer { get; set; }
@@ -35,24 +30,24 @@ namespace BootstrapBlazor.Localization.Json
         public Func<string, IConfiguration>? LocalizerConfigurationFactory { get; set; }
 
         /// <summary>
-        /// 获得/设置 LoggerFactory 实例
-        /// </summary>
-        public ILoggerFactory LoggerFactory { get; set; }
-
-        /// <summary>
         /// 构造方法
         /// </summary>
         public JsonLocalizationOptions()
         {
             ResourcesPath = "Resources";
-            LoggerFactory = ServiceProviderHelper.ServiceProvider.GetRequiredService<ILoggerFactory>();
         }
 
         /// <summary>
-        /// 创建 IOptions 示例方法
+        /// 
         /// </summary>
-        /// <param name="resourcesPath"></param>
+        /// <param name="resourcesPath">resx 资源文件路径</param>
+        /// <typeparam name="TType"></typeparam>
         /// <returns></returns>
-        public IOptions<LocalizationOptions> CreateOptions(string? resourcesPath = null) => Options.Create(new LocalizationOptions() { ResourcesPath = resourcesPath ?? ResourcesPath });
+        public IStringLocalizer CreateStringLocalizer<TType>(string? resourcesPath = null)
+        {
+            var options = Options.Create(new LocalizationOptions() { ResourcesPath = resourcesPath ?? ResourcesPath });
+            var loggerFactory = ServiceProviderHelper.ServiceProvider.GetRequiredService<ILoggerFactory>();
+            return new ResourceManagerStringLocalizerFactory(options, loggerFactory).Create(typeof(TType));
+        }
     }
 }
