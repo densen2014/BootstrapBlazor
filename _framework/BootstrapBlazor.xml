@@ -6225,6 +6225,11 @@
             </summary>
             <param name="item"></param>
         </member>
+        <member name="T:BootstrapBlazor.Components.MinValidator">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:BootstrapBlazor.Components.MultiSelect`1">
             <summary>
             MultiSelect 组件
@@ -6283,6 +6288,26 @@
         <member name="P:BootstrapBlazor.Components.MultiSelect`1.ClearText">
             <summary>
             获得/设置 全选按钮显示文本
+            </summary>
+        </member>
+        <member name="P:BootstrapBlazor.Components.MultiSelect`1.Max">
+            <summary>
+            获得/设置 选项最大数 默认为 0 不限制
+            </summary>
+        </member>
+        <member name="P:BootstrapBlazor.Components.MultiSelect`1.MaxErrorMessage">
+            <summary>
+            获得/设置 设置最大值时错误消息文字
+            </summary>
+        </member>
+        <member name="P:BootstrapBlazor.Components.MultiSelect`1.Min">
+            <summary>
+            获得/设置 选项最小数 默认为 0 不限制
+            </summary>
+        </member>
+        <member name="P:BootstrapBlazor.Components.MultiSelect`1.MinErrorMessage">
+            <summary>
+            获得/设置 设置最小值时错误消息文字
             </summary>
         </member>
         <member name="M:BootstrapBlazor.Components.MultiSelect`1.OnInitialized">
