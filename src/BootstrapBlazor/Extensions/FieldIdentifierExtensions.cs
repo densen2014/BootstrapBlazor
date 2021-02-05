@@ -52,10 +52,14 @@ namespace Microsoft.AspNetCore.Components.Forms
             {
                 if (TryGetValidatableProperty(cacheKey.Type, cacheKey.FieldName, out var propertyInfo))
                 {
-                    var colNameAttribute = propertyInfo.GetCustomAttribute<ColumnNameAttribute>();
-                    if (colNameAttribute != null)
+                    if (string.IsNullOrEmpty(dn))
                     {
-                        dn = colNameAttribute.GetName();
+                        var localizer = JsonStringLocalizerFactory.CreateLocalizer(cacheKey.Type);
+                        var stringLocalizer = localizer[fieldName];
+                        if (!stringLocalizer.ResourceNotFound)
+                        {
+                            dn = stringLocalizer.Value;
+                        }
                     }
                     if (string.IsNullOrEmpty(dn))
                     {
