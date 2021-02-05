@@ -77,7 +77,7 @@ namespace BootstrapBlazor.Server
                 options.StringLocalizer = JsonLocalizationOptions.CreateStringLocalizer<Program>();
 
                 // 附加自己的 json 多语言文化资源文件 如 zh-TW.json
-                options.AdditionalAssemblies = new Assembly[] { GetType().Assembly };
+                options.AdditionalAssemblies = new Assembly[] { GetType().Assembly, typeof(BootstrapBlazor.Shared.App).Assembly };
 
                 options.AdditionalJsonFiles = new string[]
                 {
