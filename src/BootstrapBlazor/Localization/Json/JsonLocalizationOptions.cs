@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -51,11 +52,19 @@ namespace BootstrapBlazor.Localization.Json
         /// <param name="resourcesPath">resx 资源文件路径 默认为 Resources</param>
         /// <typeparam name="TType"></typeparam>
         /// <returns></returns>
-        public static IStringLocalizer CreateStringLocalizer<TType>(string resourcesPath = "Resources")
+        public static IStringLocalizer CreateStringLocalizer<TType>(string resourcesPath = "Resources") => CreateStringLocalizer(typeof(TType), resourcesPath);
+
+        /// <summary>
+        /// 创建 IStringLocalizer 实例方法
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="resourcesPath">resx 资源文件路径 默认为 Resources</param>
+        /// <returns></returns>
+        public static IStringLocalizer CreateStringLocalizer(Type type, string resourcesPath = "Resources")
         {
             var options = Options.Create(new LocalizationOptions() { ResourcesPath = resourcesPath });
             var loggerFactory = ServiceProviderHelper.ServiceProvider.GetRequiredService<ILoggerFactory>();
-            return new ResourceManagerStringLocalizerFactory(options, loggerFactory).Create(typeof(TType));
+            return new ResourceManagerStringLocalizerFactory(options, loggerFactory).Create(type);
         }
     }
 }

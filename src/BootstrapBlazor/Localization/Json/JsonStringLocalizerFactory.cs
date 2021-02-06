@@ -50,7 +50,7 @@ namespace BootstrapBlazor.Localization.Json
                 typeName = typeName.Substring(0, index);
             }
             typeName = TryFixInnerClassPath(typeName);
-            return CreateJsonStringLocalizer(typeInfo.Assembly, typeName);
+            return CreateJsonStringLocalizer(typeInfo, typeName);
         }
 
         /// <summary>
@@ -74,19 +74,19 @@ namespace BootstrapBlazor.Localization.Json
                 assembly = GetType().Assembly;
             }
 
-            return CreateJsonStringLocalizer(assembly, string.Empty);
+            return CreateJsonStringLocalizer(assembly.GetType().GetTypeInfo(), string.Empty);
         }
 
         /// <summary>
         /// 创建 IStringLocalizer 实例方法
         /// </summary>
-        /// <param name="assembly"></param>
+        /// <param name="typeInfo"></param>
         /// <param name="typeName"></param>
         /// <returns></returns>
-        protected virtual IStringLocalizer CreateJsonStringLocalizer(Assembly assembly, string typeName)
+        protected virtual IStringLocalizer CreateJsonStringLocalizer(TypeInfo typeInfo, string typeName)
         {
             var logger = _loggerFactory.CreateLogger<JsonStringLocalizer>();
-            return new JsonStringLocalizer(assembly, typeName, logger, _jsonOptions);
+            return new JsonStringLocalizer(typeInfo, typeName, logger, _jsonOptions);
         }
 
         private static string TryFixInnerClassPath(string path)
