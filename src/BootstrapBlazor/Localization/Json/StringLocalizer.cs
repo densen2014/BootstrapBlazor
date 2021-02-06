@@ -4,10 +4,8 @@
 
 using BootstrapBlazor.Components;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace BootstrapBlazor.Localization.Json
 {
@@ -16,18 +14,11 @@ namespace BootstrapBlazor.Localization.Json
     /// </summary>
     internal class StringLocalizer : IStringLocalizer
     {
-        [NotNull]
-        private readonly IStringLocalizer? _localizer;
+        private readonly IStringLocalizer _localizer;
 
-        public StringLocalizer(IStringLocalizerFactory factory, ILoggerFactory loggerFactory, IOptions<JsonLocalizationOptions> options)
+        public StringLocalizer(IStringLocalizerFactory factory, IOptions<JsonLocalizationOptions> options)
         {
-            _localizer = options.Value.StringLocalizer;
-
-            if (_localizer == null)
-            {
-                var op = Options.Create(new LocalizationOptions() { ResourcesPath = options.Value.ResourcesPath });
-                _localizer = new ResourceManagerStringLocalizerFactory(op, loggerFactory).Create("BootstrapBlazor.Server", op.Value.ResourcesPath);
-            }
+            _localizer = options.Value.StringLocalizer!;
         }
 
         public LocalizedString this[string name] => _localizer[name];

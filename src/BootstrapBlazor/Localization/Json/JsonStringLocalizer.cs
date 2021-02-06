@@ -26,21 +26,19 @@ namespace BootstrapBlazor.Localization.Json
         private readonly string _typeName;
         private readonly ILogger _logger;
         private readonly JsonLocalizationOptions _options;
-        private readonly Type _type;
 
         private string _searchedLocation = "";
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        /// <param name="typeInfo"></param>
+        /// <param name="assembly"></param>
         /// <param name="typeName"></param>
         /// <param name="logger"></param>
         /// <param name="options"></param>
-        public JsonStringLocalizer(TypeInfo typeInfo, string typeName, ILogger logger, JsonLocalizationOptions options)
+        public JsonStringLocalizer(Assembly assembly, string typeName, ILogger logger, JsonLocalizationOptions options)
         {
-            _type = typeInfo.AsType();
-            _assembly = typeInfo.Assembly;
+            _assembly = assembly;
             _typeName = typeName;
             _logger = logger;
             _options = options;
@@ -120,13 +118,6 @@ namespace BootstrapBlazor.Localization.Json
                 {
                     value = local.Value;
                 }
-            }
-
-            var tl = JsonLocalizationOptions.CreateStringLocalizer(_type);
-            var tlt = tl[name];
-            if (!tlt.ResourceNotFound)
-            {
-                value = tlt.Value;
             }
 
             if (string.IsNullOrEmpty(value))
