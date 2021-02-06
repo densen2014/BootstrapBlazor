@@ -55,7 +55,7 @@ namespace BootstrapBlazor.Localization.Json
             {
                 var value = GetStringSafely(name);
 
-                return new LocalizedString(name, value ?? "", resourceNotFound: value == null, searchedLocation: _searchedLocation);
+                return new LocalizedString(name, value ?? name, resourceNotFound: value == null, searchedLocation: _searchedLocation);
             }
         }
 
@@ -70,7 +70,7 @@ namespace BootstrapBlazor.Localization.Json
             get
             {
                 var format = GetStringSafely(name);
-                var value = !string.IsNullOrEmpty(format) ? string.Format(format, arguments) : "";
+                var value = !string.IsNullOrEmpty(format) ? string.Format(format, arguments) : name;
 
                 return new LocalizedString(name, value, resourceNotFound: format == null, searchedLocation: _searchedLocation);
             }
@@ -99,7 +99,7 @@ namespace BootstrapBlazor.Localization.Json
             foreach (var name in resourceNames)
             {
                 var value = GetStringSafely(name);
-                yield return new LocalizedString(name, value ?? "", resourceNotFound: value == null, searchedLocation: _searchedLocation);
+                yield return new LocalizedString(name, value ?? name, resourceNotFound: value == null, searchedLocation: _searchedLocation);
             }
         }
 
