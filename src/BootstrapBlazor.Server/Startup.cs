@@ -66,6 +66,8 @@ namespace BootstrapBlazor.Server
 
             services.AddBlazorBackgroundTask();
 
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
             // 增加 BootstrapBlazor 组件
             services.AddBootstrapBlazor(options =>
             {
