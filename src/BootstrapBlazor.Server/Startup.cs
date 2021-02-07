@@ -3,21 +3,14 @@
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using BootstrapBlazor.Components;
-using BootstrapBlazor.Localization.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Reflection;
 
 namespace BootstrapBlazor.Server
@@ -76,10 +69,10 @@ namespace BootstrapBlazor.Server
             }, options =>
             {
                 // 设置自己的 RESX 多语言文化资源文件 如 Program.{CultureName}.resx
-                options.StringLocalizer = JsonLocalizationOptions.CreateStringLocalizer<Program>();
+                options.ResourceManagerStringLocalizerType = typeof(Program);
 
                 // 附加自己的 json 多语言文化资源文件 如 zh-TW.json
-                options.AdditionalAssemblies = new Assembly[] { GetType().Assembly, typeof(BootstrapBlazor.Shared.App).Assembly };
+                options.AdditionalJsonAssemblies = new Assembly[] { GetType().Assembly, typeof(BootstrapBlazor.Shared.App).Assembly };
 
                 options.AdditionalJsonFiles = new string[]
                 {
