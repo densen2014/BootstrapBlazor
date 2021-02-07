@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
-using BootstrapBlazor.Components;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ namespace BootstrapBlazor.Localization.Json
 
         public StringLocalizer(IStringLocalizerFactory factory, IOptions<JsonLocalizationOptions> options)
         {
-            _localizer = options.Value.StringLocalizer!;
+            _localizer = factory.Create(options.Value.ResourceManagerStringLocalizerType!);
         }
 
         public LocalizedString this[string name] => _localizer[name];
