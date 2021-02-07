@@ -96,10 +96,13 @@ namespace BootstrapBlazor.DataAcces.EntityFrameworkCore
         {
             var query = _db.Set<TModel>().AsQueryable();
 
-            // 处理过滤与搜索
-            query = query.Where(option.Filters.GetFilterLambda<TModel>()).Where(option.Searchs.GetFilterLambda<TModel>());
+            // 处理过滤与高级搜索
+            query = query.Where(option.Filters.Concat(option.Searchs).GetFilterLambda<TModel>());
 
-            // TODO: 未做排序处理
+            // 处理排序
+            if (!string.IsNullOrEmpty(option.SortName)) query = query.Sort(option.SortName, option.SortOrder);
+
+            // 处理分页
             var items = query.Skip((option.PageIndex - 1) * option.PageItems).Take(option.PageItems);
             var ret = new QueryData<TModel>()
             {
