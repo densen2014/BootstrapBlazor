@@ -136,9 +136,9 @@ namespace BootstrapBlazor.Localization.Json
 
                 if (_resourcesCache.TryGetValue(culture.Name, out var resources))
                 {
-                    var resource = resources?.SingleOrDefault(s => s.Key == name);
-
+                    var resource = resources?.FirstOrDefault(s => s.Key == name);
                     value = resource?.Value ?? null;
+                    _logger.LogDebug($"{nameof(JsonStringLocalizer)} searched for '{name}' in '{_searchedLocation}' with culture '{culture}'.");
 
                     if (value != null)
                     {
