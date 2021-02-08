@@ -94,10 +94,8 @@ namespace BootstrapBlazor.DataAcces.EntityFrameworkCore
         /// <returns></returns>
         public override Task<QueryData<TModel>> QueryAsync(QueryPageOptions option)
         {
-            var query = _db.Set<TModel>().AsQueryable();
-
             // 处理过滤与高级搜索
-            query = query.Where(option.Filters.Concat(option.Searchs).GetFilterLambda<TModel>());
+            var query = _db.Set<TModel>().Where(option.Filters.Concat(option.Searchs).GetFilterLambda<TModel>());
 
             // 处理排序
             if (!string.IsNullOrEmpty(option.SortName)) query = query.Sort(option.SortName, option.SortOrder);
@@ -107,7 +105,10 @@ namespace BootstrapBlazor.DataAcces.EntityFrameworkCore
             var ret = new QueryData<TModel>()
             {
                 TotalCount = query.Count(),
-                Items = items
+                Items = items,
+                IsSorted = true,
+                IsFiltered = true,
+                IsSearch = true
             };
             return Task.FromResult(ret);
         }
