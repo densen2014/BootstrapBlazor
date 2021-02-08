@@ -4,6 +4,8 @@
 
 using BootstrapBlazor.Components;
 using BootstrapBlazor.Localization.Json;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
@@ -52,6 +54,7 @@ namespace Microsoft.AspNetCore.Components.Forms
             {
                 if (TryGetValidatableProperty(cacheKey.Type, cacheKey.FieldName, out var propertyInfo))
                 {
+                    // 显示名称为空时通过资源文件查找 FieldName 项
                     if (string.IsNullOrEmpty(dn))
                     {
                         var localizer = JsonStringLocalizerFactory.CreateLocalizer(cacheKey.Type);
@@ -61,6 +64,8 @@ namespace Microsoft.AspNetCore.Components.Forms
                             dn = stringLocalizer.Value;
                         }
                     }
+
+                    // 回退查找 Display 标签
                     if (string.IsNullOrEmpty(dn))
                     {
                         var displayNameAttribute = propertyInfo.GetCustomAttribute<DisplayAttribute>();
@@ -69,6 +74,8 @@ namespace Microsoft.AspNetCore.Components.Forms
                             dn = displayNameAttribute.Name;
                         }
                     }
+
+                    // 回退查找 DisplayName 标签
                     if (string.IsNullOrEmpty(dn))
                     {
                         var displayAttribute = propertyInfo.GetCustomAttribute<DisplayNameAttribute>();
@@ -77,8 +84,20 @@ namespace Microsoft.AspNetCore.Components.Forms
                             dn = displayAttribute.DisplayName;
                         }
                     }
+
+                    // 回退查找资源文件通过 dn 查找匹配项 用于支持 Validation
                     if (!string.IsNullOrEmpty(dn))
                     {
+                        var resxType = ServiceProviderHelper.ServiceProvider.GetRequiredService<IOptions<JsonLocalizationOptions>>();
+                        if (resxType.Value.ResourceManagerStringLocalizerType != null)
+                        {
+                            var localizer = JsonStringLocalizerFactory.CreateLocalizer(resxType.Value.ResourceManagerStringLocalizerType);
+                            var stringLocalizer = localizer[dn];
+                            if (!stringLocalizer.ResourceNotFound)
+                            {
+                                dn = stringLocalizer.Value;
+                            }
+                        }
                         // add display name into cache
                         DisplayNameCache.GetOrAdd(cacheKey, key => dn);
                     }
