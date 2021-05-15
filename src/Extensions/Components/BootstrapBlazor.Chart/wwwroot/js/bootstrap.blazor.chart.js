@@ -44,6 +44,17 @@
         }
     };
 
+    var skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
+    var down = (ctx, value) => ctx.p0.parsed.y > ctx.p1.parsed.y ? value : undefined;
+
+    var genericOptions = {
+        fill: false,
+        interaction: {
+            intersect: false
+        },
+        radius: 0
+    };
+
     $.extend({
         getChartOption: function (option) {
             var colors = [];
@@ -52,6 +63,20 @@
             var config = {};
             var colorFunc = null;
             if (option.type === 'line') {
+                if ($.isArray(option.data)) {
+                    $.each(option.data, function (i, ele) {
+                        $.each(ele.data, function (j, el) {
+                            if (el === null) {
+                                option.data[i].data[j] = NaN;
+                                option.data[i].segment = {
+                                    borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)') || down(ctx, 'rgb(192,75,75)'),
+                                    borderDash: ctx => skipped(ctx, [6, 6])
+                                };
+                            }
+                        });
+                    });
+                }
+                console.log(option);
                 config = $.extend(true, {}, chartOption);
                 colorFunc = function (data) {
                     var color = chartColors[colors.shift()]
