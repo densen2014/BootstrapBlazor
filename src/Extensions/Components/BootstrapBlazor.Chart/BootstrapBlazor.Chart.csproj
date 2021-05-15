@@ -11,15 +11,13 @@
     <Content Remove="wwwroot\css\Chart.*" />
     <Content Remove="wwwroot\js\bootstrap.blazor.chart.js" />
     <Content Remove="wwwroot\js\bootstrap.blazor.chart.min.js" />
-    <Content Remove="wwwroot\js\Chart.bundle.js" />
-    <Content Remove="wwwroot\js\Chart.bundle.min.js" />
+    <Content Remove="wwwroot\js\chart.min.js" />
     <None Include="bundleconfig.json" />
     <None Include="wwwroot\css\bootstrap.blazor.chart.css" />
     <None Include="wwwroot\css\Chart.*" />
     <None Include="wwwroot\js\bootstrap.blazor.chart.js" />
     <None Include="wwwroot\js\bootstrap.blazor.chart.min.js" />
-    <None Include="wwwroot\js\Chart.bundle.js" />
-    <None Include="wwwroot\js\Chart.bundle.min.js" />
+    <None Include="wwwroot\js\chart.min.js" />
   </ItemGroup>
 
 </Project>
