@@ -68,15 +68,16 @@
                         $.each(ele.data, function (j, el) {
                             if (el === null) {
                                 option.data[i].data[j] = NaN;
-                                option.data[i].segment = {
-                                    borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)') || down(ctx, 'rgb(192,75,75)'),
-                                    borderDash: ctx => skipped(ctx, [6, 6])
-                                };
+                                if (option.data[i].segment === undefined) {
+                                    option.data[i].segment = {
+                                        borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)') || down(ctx, 'rgb(192,75,75)'),
+                                        borderDash: ctx => skipped(ctx, [6, 6])
+                                    };
+                                }
                             }
                         });
                     });
                 }
-                console.log(option);
                 config = $.extend(true, {}, chartOption);
                 colorFunc = function (data) {
                     var color = chartColors[colors.shift()]
