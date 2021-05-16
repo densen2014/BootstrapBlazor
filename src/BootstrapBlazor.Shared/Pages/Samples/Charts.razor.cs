@@ -61,7 +61,7 @@ namespace BootstrapBlazor.Shared.Pages
             }
         }
 
-        private Task<ChartDataSource> OnInit(int dsCount, int daCount)
+        private static Task<ChartDataSource> OnInit(int dsCount, int daCount)
         {
             var ds = new ChartDataSource();
             ds.Options.XAxes.Add(new ChartAxes() { LabelString = "天数" });
@@ -80,11 +80,11 @@ namespace BootstrapBlazor.Shared.Pages
             return Task.FromResult(ds);
         }
 
-        private CancellationTokenSource _chartCancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _chartCancellationTokenSource = new();
 
         private Task OnPlayChart()
         {
-            _chartCancellationTokenSource = new CancellationTokenSource();
+            _chartCancellationTokenSource = new();
             return Task.Run(async () =>
             {
                 while (!_chartCancellationTokenSource.IsCancellationRequested)
@@ -122,7 +122,7 @@ namespace BootstrapBlazor.Shared.Pages
             return Task.FromResult(ds);
         }
 
-        private Task<ChartDataSource> OnBubbleInit(int dsCount, int daCount)
+        private static Task<ChartDataSource> OnBubbleInit(int dsCount, int daCount)
         {
             var ds = new ChartDataSource
             {
@@ -145,7 +145,7 @@ namespace BootstrapBlazor.Shared.Pages
             return Task.FromResult(ds);
         }
 
-        private void RandomData(Chart? chart)
+        private static void RandomData(Chart? chart)
         {
             chart?.Update();
         }
@@ -159,7 +159,7 @@ namespace BootstrapBlazor.Shared.Pages
             }
         }
 
-        private void RemoveDataSet(Chart? chart, ref int dsCount)
+        private static void RemoveDataSet(Chart? chart, ref int dsCount)
         {
             if (dsCount > 1)
             {
@@ -185,7 +185,7 @@ namespace BootstrapBlazor.Shared.Pages
             }
         }
 
-        private void RemoveData(Chart? chart, ref int daCount)
+        private static void RemoveData(Chart? chart, ref int daCount)
         {
             var limit = (chart?.ChartType ?? ChartType.Line) switch
             {
@@ -239,7 +239,7 @@ namespace BootstrapBlazor.Shared.Pages
         /// 获得事件方法
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<EventItem> GetEvents() => new EventItem[]
+        private static IEnumerable<EventItem> GetEvents() => new EventItem[]
         {
             new EventItem()
             {
@@ -259,7 +259,7 @@ namespace BootstrapBlazor.Shared.Pages
         /// 获得属性方法
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<AttributeItem> GetAttributes() => new AttributeItem[]
+        private static IEnumerable<AttributeItem> GetAttributes() => new AttributeItem[]
         {
             // TODO: 移动到数据库中
             new AttributeItem() {
