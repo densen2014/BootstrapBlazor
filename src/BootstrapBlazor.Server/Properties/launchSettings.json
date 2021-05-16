@@ -1,4 +1,4 @@
-{
+﻿{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
@@ -18,10 +18,20 @@
     "BootstrapBlazor.WebConsole": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:50853/"
+    },
+    "BootstrapBlazor.WebConsole2": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "Charts_test",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5853/"
     },
     "Docker": {
       "commandName": "Docker",
