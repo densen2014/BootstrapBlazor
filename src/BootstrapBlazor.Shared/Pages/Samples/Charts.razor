@@ -46,6 +46,10 @@
     </div>
 </Block>
 
+<Block Title="Line 图" Introduction="使用 <code>OnInit</code> 回调委托方法，对数据中的 <code>null</code> 值，使用虚线进行连接">
+    <Chart OnInit="@OnInitNullValue" />
+</Block>
+
 <Block Title="Bar 图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>bar</code> 图">
     <Chart ChartType="ChartType.Bar" OnInit="@(() => OnInit(BarDatasetCount, BarDataCount))" @ref="BarChart" />
     <div class="text-center mt-2 chart">

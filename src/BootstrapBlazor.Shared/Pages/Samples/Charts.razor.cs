@@ -80,6 +80,25 @@ namespace BootstrapBlazor.Shared.Pages
             return Task.FromResult(ds);
         }
 
+        private static Task<ChartDataSource> OnInitNullValue()
+        {
+            var ds = new ChartDataSource();
+            ds.Options.XAxes.Add(new ChartAxes() { LabelString = "天数" });
+            ds.Options.YAxes.Add(new ChartAxes() { LabelString = "数值" });
+
+            ds.Labels = Enumerable.Range(1, 8).Select(i => i.ToString());
+
+            for (var index = 0; index < 2; index++)
+            {
+                ds.Data.Add(new ChartDataset()
+                {
+                    Label = $"数据集 {index}",
+                    Data = Enumerable.Range(1, 8).Select((v, i) => i == 3 ? (object)null! : Randomer.Next(20, 37))
+                });
+            }
+            return Task.FromResult(ds);
+        }
+
         private CancellationTokenSource _chartCancellationTokenSource = new();
 
         private Task OnPlayChart()
