@@ -90,7 +90,16 @@
                 }
             }
             else if (option.type === 'bar') {
+                chartOption.scales = $.extend(true, chartOption.scales, {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true
+                    }
+                });
                 config = $.extend(true, {}, chartOption);
+                console.log(config);
                 colorFunc = function (data) {
                     var color = chartColors[colors.shift()]
                     $.extend(data, {
