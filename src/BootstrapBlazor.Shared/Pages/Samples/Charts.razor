@@ -33,7 +33,7 @@
 
 <p>组件数据在 <code>OnInit</code> 回调委托中进行设置即可</p>
 
-<Block Title="Line 图" Introduction="使用 <code>OnInit</code> 回调委托方法，对初始化数据进行赋值后，即可进行绘图操作">
+<Block Title="Line 折线图" Introduction="使用 <code>OnInit</code> 回调委托方法，对初始化数据进行赋值后，即可进行绘图操作">
     <Chart OnInit="@(() => OnInit(LineDatasetCount, LineDataCount))" @ref="LineChart" />
     <div class="text-center mt-2 chart">
         <div class="btn-group">
@@ -46,11 +46,11 @@
     </div>
 </Block>
 
-<Block Title="Line 图" Introduction="使用 <code>OnInit</code> 回调委托方法，对数据中的 <code>null</code> 值，使用虚线进行连接">
+<Block Title="Line 折线图" Introduction="使用 <code>OnInit</code> 回调委托方法，对数据中的 <code>null</code> 值，使用虚线进行连接">
     <Chart OnInit="@OnInitNullValue" />
 </Block>
 
-<Block Title="Bar 图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>bar</code> 图">
+<Block Title="Bar 柱状/条形图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>bar</code> 图">
     <Chart ChartType="ChartType.Bar" OnInit="@(() => OnInit(BarDatasetCount, BarDataCount))" @ref="BarChart" />
     <div class="text-center mt-2 chart">
         <div class="btn-group">
@@ -77,7 +77,7 @@
     <a href="/Charts_test"><Badge Color="Color.Info">Bar合并显示</Badge></a>
 </Block>
 
-<Block Title="Pie 图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>pie</code> 图">
+<Block Title="Pie 饼图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>pie</code> 图">
     <div style="@css1">
         <Chart ChartType="ChartType.Pie" OnInit="@(() => OnPieInit(PieDatasetCount, PieDataCount))" @ref="PieChart" />
     </div>
@@ -92,7 +92,7 @@
     </div>
 </Block>
 
-<Block Title="Doughnut 图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>doughnut</code> 图">
+<Block Title="Doughnut 环形图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>doughnut</code> 图">
     <div style="@css1">
         <Chart ChartType="ChartType.Doughnut" OnInit="@(() => OnPieInit(DoughnutDatasetCount, DoughnutDataCount))" @ref="DoughnutChart" />
     </div>
@@ -108,7 +108,7 @@
     </div>
 </Block>
 
-<Block Title="Bubble 图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>bubble</code> 图">
+<Block Title="Bubble 气泡图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>bubble</code> 图">
         <Chart ChartType="ChartType.Bubble" OnInit="@(() => OnBubbleInit(BubbleDatasetCount, BubbleDataCount))" @ref="BubbleChart" />
     <div class="text-center mt-2 chart">
         <div class="btn-group">
