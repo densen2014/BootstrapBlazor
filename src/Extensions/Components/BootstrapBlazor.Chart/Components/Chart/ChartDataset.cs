@@ -25,5 +25,11 @@ namespace BootstrapBlazor.Components
         /// 获得/设置 是否填充 默认 false
         /// </summary>
         public bool Fill { get; set; }
+
+        /// <summary>
+        /// 获得/设置 本数据贝塞尔曲线的线张力,设置后全局设置无效,全局变回默认直线。 <para></para>默认为 0 直线 , 曲线显示推荐值 0.4 
+        /// </summary>
+        public double Tension { get; set; } = 0d;
+
     }
 }

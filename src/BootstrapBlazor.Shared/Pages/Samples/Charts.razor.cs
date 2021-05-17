@@ -66,6 +66,7 @@ namespace BootstrapBlazor.Shared.Pages
             var ds = new ChartDataSource();
             ds.Options.XAxes.Add(new ChartAxes() { LabelString = "天数" });
             ds.Options.YAxes.Add(new ChartAxes() { LabelString = "数值" });
+            ds.Options.Tension = 0.4;
 
             ds.Labels = Enumerable.Range(1, daCount).Select(i => i.ToString());
 
@@ -77,6 +78,8 @@ namespace BootstrapBlazor.Shared.Pages
                     Data = Enumerable.Range(1, daCount).Select(i => Randomer.Next(20, 37)).Cast<object>()
                 });
             }
+            ds.Data.FirstOrDefault().Tension = 1.0;
+
             return Task.FromResult(ds);
         }
 

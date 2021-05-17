@@ -169,6 +169,8 @@
                 options: {
                     responsive: option.options.responsive,
                     title: option.options.title,
+                    tension: option.options.tension,
+                    fill: true,
                     plugins: {
                         legend: {
                             position: 'top',
