@@ -1,0 +1,74 @@
+﻿@page "/Charts_Stacked"
+@using Microsoft.Extensions.DependencyInjection
+@implements IDisposable
+@inherits ComponentBase
+@inject NugetVersionService VersionManager
+
+
+
+<Block Title="Bar 柱状/条形图 合并显示数据" Introduction="通过设置 <code>IsStacked</code> 合并/分开数据显示">
+    @if (Show)
+    {
+        <Chart ChartType="ChartType.Bar" OnInit="@(() => OnInit(BarDatasetCount, BarDataCount))" @ref="BarChart" />
+    }
+    <div class="text-center mt-2 chart">
+        <div class="btn-group">
+            <button class="btn btn-info" data-method="play" @onclick="@OnPlayChart">
+                <i class="fa fa-play-circle"></i>
+                <span>开启动画</span>
+            </button>
+            <button class="btn btn-info" data-method="stop" @onclick="@OnStopChart">
+                <i class="fa fa-stop-circle"></i>
+                <span>关闭动画</span>
+            </button>
+        </div>
+    </div>
+    <div class="text-center mt-2 chart">
+        <div class="btn-group">
+            <button class="btn btn-primary" @onclick="e => RandomData(BarChart)"><i class="fa fa-bar-chart"></i><span>随机数据</span></button>
+            <button class="btn btn-primary" @onclick="e => AddDataSet(BarChart, ref BarDatasetCount)"><i class="fa fa-plus-circle"></i><span>添加数据集</span></button>
+            <button class="btn btn-primary" @onclick="e => RemoveDataSet(BarChart, ref BarDatasetCount)"><i class="fa fa-minus-circle"></i><span>移除数据集</span></button>
+            <button class="btn btn-primary" @onclick="e => AddData(BarChart, ref BarDataCount)"><i class="fa fa-plus"></i><span>添加数据</span></button>
+            <button class="btn btn-primary" @onclick="e => RemoveData(BarChart, ref BarDataCount)"><i class="fa fa-minus"></i><span>移除数据</span></button>
+            <button class="btn btn-primary" @onclick="e => SwitchStacked(BarChart)"><i class="fa @(IsStacked?"fa-toggle-on":"fa-toggle-off")"></i><span>@(IsStacked? "合并" : "不合并")</span></button>
+            <button class="btn btn-primary" @onclick="e => ReloadChart(BarChart)"><i class="fa fa-refresh"></i><span>刷新</span></button>
+        </div>
+    </div>
+</Block>
+
+ 
+@code {
+    private int LineDatasetCount = 2;
+
+    private int BarDatasetCount = 2;
+
+    private int PieDatasetCount = 1;
+
+    private int DoughnutDatasetCount = 1;
+
+    private int BubbleDatasetCount = 2;
+
+    private int LineDataCount = 7;
+
+    private int BarDataCount = 7;
+
+    private int PieDataCount = 5;
+
+    private int DoughnutDataCount = 5;
+
+    private int BubbleDataCount = 7;
+
+    /// <summary>
+    /// 获得/设置 版本号字符串
+    /// </summary>
+    private string Version { get; set; } = "fetching";
+
+    /// <summary>
+    /// OnInitializedAsync 方法
+    /// </summary>
+    /// <returns></returns>
+    protected override async Task OnInitializedAsync()
+    {
+        Version = await VersionManager.GetVersionAsync("bootstrapblazor.chart");
+    }
+}

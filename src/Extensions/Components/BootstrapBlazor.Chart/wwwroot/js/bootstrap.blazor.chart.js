@@ -159,7 +159,7 @@
                 colorFunc(this);
             });
 
-            console.log("stacked", option.options?.xAxes[0]?.stacked);
+            console.log("tension", option.data[0]);
 
             return $.extend(true, config, {
                 type: option.type,

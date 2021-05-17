@@ -17,7 +17,7 @@ namespace BootstrapBlazor.Shared.Pages
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class Charts
+    public sealed partial class Charts_Bar_Colors
     {
         /// <summary>
         /// 
@@ -30,7 +30,7 @@ namespace BootstrapBlazor.Shared.Pages
 
         private static Random Randomer { get; set; } = new Random();
 
-        private JSInterop<Charts>? Interope { get; set; }
+        private JSInterop<Charts_Bar_Colors>? Interope { get; set; }
 
         private Chart? LineChart { get; set; }
 
@@ -44,6 +44,16 @@ namespace BootstrapBlazor.Shared.Pages
 
         private bool IsCricle { get; set; }
 
+        /// <summary>
+        /// 是否合并Bar显示
+        /// </summary>
+        private bool IsStacked { get; set; }
+
+        /// <summary>
+        /// 强刷显示控件控制,Hack一下
+        /// </summary>
+        private bool Show { get; set; } = true;
+
         private IEnumerable<string> Colors { get; set; } = new List<string>() { "Red", "Blue", "Green", "Orange", "Yellow", "Tomato", "Pink", "Violet" };
 
         /// <summary>
@@ -56,16 +66,33 @@ namespace BootstrapBlazor.Shared.Pages
 
             if (firstRender && JSRuntime != null)
             {
-                if (Interope == null) Interope = new JSInterop<Charts>(JSRuntime);
+                if (Interope == null) Interope = new JSInterop<Charts_Bar_Colors>(JSRuntime);
                 await Interope.InvokeVoidAsync(this, "", "_initChart", nameof(ShowToast));
             }
         }
 
-        private static Task<ChartDataSource> OnInit(int dsCount, int daCount)
+        private Task<ChartDataSource> OnInit(int dsCount, int daCount, bool? isStacked = null)
         {
             var ds = new ChartDataSource();
-            ds.Options.XAxes.Add(new ChartAxes() { LabelString = "天数" });
-            ds.Options.YAxes.Add(new ChartAxes() { LabelString = "数值" });
+            IsStacked = isStacked ?? IsStacked;
+            if (IsStacked)
+            {
+                ds.Options.Title.Text = "合并Bar";
+            }
+            ds.Options.XAxes.Add(new ChartAxes() { LabelString = "天数", Stacked = IsStacked });
+            ds.Options.YAxes.Add(new ChartAxes() { LabelString = "数值", Stacked = IsStacked });
+
+            //设置自定义颜色
+            ds.Options.Colors = new Dictionary<string, string>() {
+                                    { "blue:", "rgb(54, 162, 235)" },
+                                    { "green:", "rgb(75, 192, 192)" },
+                                    { "red:", "rgb(255, 99, 132)" },
+                                    { "orange:", "rgb(255, 159, 64)" },
+                                    { "yellow:", "rgb(255, 205, 86)" },
+                                    { "tomato:", "rgb(255, 99, 71)" },
+                                    { "pink:", "rgb(255, 192, 203)" },
+                                    { "violet:", "rgb(238, 130, 238)" },
+                                };
 
             ds.Labels = Enumerable.Range(1, daCount).Select(i => i.ToString());
 
@@ -77,7 +104,6 @@ namespace BootstrapBlazor.Shared.Pages
                     Data = Enumerable.Range(1, daCount).Select(i => Randomer.Next(20, 37)).Cast<object>()
                 });
             }
-
             return Task.FromResult(ds);
         }
 
@@ -226,6 +252,30 @@ namespace BootstrapBlazor.Shared.Pages
             IsCricle = !IsCricle;
             DoughnutChart?.SetAngle(IsCricle ? 360 : 0);
             DoughnutChart?.Update("setAngle");
+        }
+
+        /// <summary>
+        /// 切换合并显示
+        /// </summary>
+        /// <param name="chart"></param>
+        private void SwitchStacked(Chart? chart)
+        {
+            IsStacked = !IsStacked;
+            ReloadChart(chart);
+        }
+
+        /// <summary>
+        /// 强刷控件,重新初始化控件外观
+        /// </summary>
+        /// <param name="chart"></param>
+        private async void ReloadChart(Chart? chart)
+        {
+            Show = false;
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(1);
+            Show = true;
+            await InvokeAsync(StateHasChanged);
+            chart?.Update();
         }
 
         /// <summary>

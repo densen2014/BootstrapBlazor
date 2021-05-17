@@ -43,10 +43,10 @@ namespace BootstrapBlazor.Components
         public bool Responsive { get; set; } = true;
 
         /// <summary>
-        /// 获得/设置 贝塞尔曲线的线张力. 默认为 0 直线 , 曲线显示推荐值 0.4
+        /// 获得/设置 贝塞尔曲线的线张力. 默认为 0.4 曲线, 设置0为直线
         /// <para></para> 单个数据也可单独,设置后全局设置无效,全局变回默认直线。
         /// </summary>
-        public double Tension { get; set; } = 0d;
+        public double Tension { get; set; } = 0.4d;
 
         /// <summary>
         /// 获得/设置 数据显示颜色

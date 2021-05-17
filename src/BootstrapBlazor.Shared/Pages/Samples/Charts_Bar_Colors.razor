@@ -1,4 +1,4 @@
-﻿@page "/Charts_test"
+﻿@page "/Charts_Bar_Colors"
 @using Microsoft.Extensions.DependencyInjection
 @implements IDisposable
 @inherits ComponentBase
@@ -6,7 +6,7 @@
 
 
 
-<Block Title="Bar 图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>bar</code> 图">
+<Block Title="Bar 图 设置每个数据显示颜色" Introduction="属性 <code>Colors</code> 设置图表数据显示颜色">
     @if (Show)
     {
         <Chart ChartType="ChartType.Bar" OnInit="@(() => OnInit(BarDatasetCount, BarDataCount))" @ref="BarChart" />
@@ -40,7 +40,7 @@
 @code {
     private int LineDatasetCount = 2;
 
-    private int BarDatasetCount = 2;
+    private int BarDatasetCount = 4;
 
     private int PieDatasetCount = 1;
 

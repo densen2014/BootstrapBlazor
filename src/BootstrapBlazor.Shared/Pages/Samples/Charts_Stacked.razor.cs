@@ -17,7 +17,7 @@ namespace BootstrapBlazor.Shared.Pages
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class Charts_test
+    public sealed partial class Charts_Stacked
     {
         /// <summary>
         /// 
@@ -30,17 +30,13 @@ namespace BootstrapBlazor.Shared.Pages
 
         private static Random Randomer { get; set; } = new Random();
 
-        private JSInterop<Charts_test>? Interope { get; set; }
-
-        private Chart? LineChart { get; set; }
+        private JSInterop<Charts_Stacked>? Interope { get; set; }
 
         private Chart? BarChart { get; set; }
 
         private Chart? PieChart { get; set; }
 
         private Chart? DoughnutChart { get; set; }
-
-        private Chart? BubbleChart { get; set; }
 
         private bool IsCricle { get; set; }
 
@@ -66,7 +62,7 @@ namespace BootstrapBlazor.Shared.Pages
 
             if (firstRender && JSRuntime != null)
             {
-                if (Interope == null) Interope = new JSInterop<Charts_test>(JSRuntime);
+                if (Interope == null) Interope = new JSInterop<Charts_Stacked>(JSRuntime);
                 await Interope.InvokeVoidAsync(this, "", "_initChart", nameof(ShowToast));
             }
         }
@@ -95,25 +91,6 @@ namespace BootstrapBlazor.Shared.Pages
             return Task.FromResult(ds);
         }
 
-        private static Task<ChartDataSource> OnInitNullValue()
-        {
-            var ds = new ChartDataSource();
-            ds.Options.XAxes.Add(new ChartAxes() { LabelString = "天数" });
-            ds.Options.YAxes.Add(new ChartAxes() { LabelString = "数值" });
-
-            ds.Labels = Enumerable.Range(1, 8).Select(i => i.ToString());
-
-            for (var index = 0; index < 2; index++)
-            {
-                ds.Data.Add(new ChartDataset()
-                {
-                    Label = $"数据集 {index}",
-                    Data = Enumerable.Range(1, 8).Select((v, i) => i == 3 ? (object)null! : Randomer.Next(20, 37))
-                });
-            }
-            return Task.FromResult(ds);
-        }
-
         private CancellationTokenSource _chartCancellationTokenSource = new();
 
         private Task OnPlayChart()
@@ -133,52 +110,7 @@ namespace BootstrapBlazor.Shared.Pages
         {
             _chartCancellationTokenSource.Cancel();
         }
-
-        private Task<ChartDataSource> OnPieInit(int dsCount, int daCount)
-        {
-            var ds = new ChartDataSource();
-            ds.Options.XAxes.Add(new ChartAxes() { LabelString = "天数" });
-            ds.Options.ShowXAxesLine = false;
-
-            ds.Options.YAxes.Add(new ChartAxes() { LabelString = "数值" });
-            ds.Options.ShowYAxesLine = false;
-
-            ds.Labels = Colors.Take(daCount);
-
-            for (var index = 0; index < dsCount; index++)
-            {
-                ds.Data.Add(new ChartDataset()
-                {
-                    Label = $"数据集 {index}",
-                    Data = Enumerable.Range(1, daCount).Select(i => Randomer.Next(20, 37)).Cast<object>()
-                });
-            }
-            return Task.FromResult(ds);
-        }
-
-        private static Task<ChartDataSource> OnBubbleInit(int dsCount, int daCount)
-        {
-            var ds = new ChartDataSource
-            {
-                Labels = Enumerable.Range(1, daCount).Select(i => i.ToString())
-            };
-
-            for (var index = 0; index < dsCount; index++)
-            {
-                ds.Data.Add(new ChartDataset()
-                {
-                    Label = $"数据集 {index}",
-                    Data = Enumerable.Range(1, daCount).Select(i => new
-                    {
-                        x = Randomer.Next(10, 40),
-                        y = Randomer.Next(10, 40),
-                        r = Randomer.Next(1, 20)
-                    })
-                });
-            }
-            return Task.FromResult(ds);
-        }
-
+ 
         private static void RandomData(Chart? chart)
         {
             chart?.Update();
@@ -235,13 +167,6 @@ namespace BootstrapBlazor.Shared.Pages
             }
         }
 
-        private void ToggleCircle()
-        {
-            IsCricle = !IsCricle;
-            DoughnutChart?.SetAngle(IsCricle ? 360 : 0);
-            DoughnutChart?.Update("setAngle");
-        }
-
         /// <summary>
         /// 切换合并显示
         /// </summary>
@@ -292,55 +217,6 @@ namespace BootstrapBlazor.Shared.Pages
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
-        /// <summary>
-        /// 获得事件方法
-        /// </summary>
-        /// <returns></returns>
-        private static IEnumerable<EventItem> GetEvents() => new EventItem[]
-        {
-            new EventItem()
-            {
-                Name = "OnInit",
-                Description="组件数据初始化委托方法",
-                Type ="Func<Task<ChartDataSource>>"
-            },
-            new EventItem()
-            {
-                Name = "OnAfterInit",
-                Description="客户端绘制图表完毕后回调此委托方法",
-                Type ="Action"
-            },
-        };
-
-        /// <summary>
-        /// 获得属性方法
-        /// </summary>
-        /// <returns></returns>
-        private static IEnumerable<AttributeItem> GetAttributes() => new AttributeItem[]
-        {
-            // TODO: 移动到数据库中
-            new AttributeItem() {
-                Name = "Angle",
-                Description = "Bubble 模式下显示角度 180 为 半圆 360 为正圆",
-                Type = "int",
-                ValueList = " — ",
-                DefaultValue = " — ",
-            },
-            new AttributeItem() {
-                Name = "Width",
-                Description = "组件宽度支持单位 如: 100px 75%",
-                Type = "string",
-                ValueList = " — ",
-                DefaultValue = " — "
-            },
-            new AttributeItem() {
-                Name = "ChartType",
-                Description = "设置图表类型",
-                Type = "ChartType",
-                ValueList = "Line|Bar|Pie|Doughnut|Bubble",
-                DefaultValue = "Line"
-            },
-        };
+         
     }
 }

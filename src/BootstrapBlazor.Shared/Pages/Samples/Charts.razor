@@ -44,10 +44,13 @@
             <button class="btn btn-primary" @onclick="e => RemoveData(LineChart, ref LineDataCount)"><i class="fa fa-minus"></i><span>移除数据</span></button>
         </div>
     </div>
+    <br />
+    <a href="/Charts_Line"><Badge Color="Color.Info">曲线/直线</Badge></a>
 </Block>
 
 <Block Title="Line 折线图" Introduction="使用 <code>OnInit</code> 回调委托方法，对数据中的 <code>null</code> 值，使用虚线进行连接">
     <Chart OnInit="@OnInitNullValue" />
+    <a href="/Charts_Line"><Badge Color="Color.Info">曲线/直线</Badge></a>
 </Block>
 
 <Block Title="Bar 柱状/条形图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>bar</code> 图">
@@ -74,7 +77,8 @@
         </div>
     </div>
     <br />
-    <a href="/Charts_test"><Badge Color="Color.Info">Bar合并显示</Badge></a>
+    <a href="/Charts_Stacked"><Badge Color="Color.Info">合并显示</Badge></a>
+    <a href="/Charts_Bar_Colors"><Badge Color="Color.Info">颜色设置</Badge></a>
 </Block>
 
 <Block Title="Pie 饼图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>pie</code> 图">
