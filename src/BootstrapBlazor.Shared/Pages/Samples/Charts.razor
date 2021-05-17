@@ -76,7 +76,9 @@
 </Block>
 
 <Block Title="Pie 图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>pie</code> 图">
-    <Chart ChartType="ChartType.Pie" OnInit="@(() => OnPieInit(PieDatasetCount, PieDataCount))" @ref="PieChart" />
+    <div style="@css1">
+        <Chart ChartType="ChartType.Pie" OnInit="@(() => OnPieInit(PieDatasetCount, PieDataCount))" @ref="PieChart" />
+    </div>
     <div class="text-center mt-2 chart">
         <div class="btn-group">
             <button class="btn btn-primary" @onclick="e => RandomData(PieChart)"><i class="fa fa-pie-chart"></i><span>随机数据</span></button>
@@ -89,7 +91,9 @@
 </Block>
 
 <Block Title="Doughnut 图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>doughnut</code> 图">
-    <Chart ChartType="ChartType.Doughnut" OnInit="@(() => OnPieInit(DoughnutDatasetCount, DoughnutDataCount))" @ref="DoughnutChart" />
+    <div style="@css1">
+        <Chart ChartType="ChartType.Doughnut" OnInit="@(() => OnPieInit(DoughnutDatasetCount, DoughnutDataCount))" @ref="DoughnutChart" />
+    </div>
     <div class="text-center mt-2 chart">
         <div class="btn-group">
             <button class="btn btn-primary" @onclick="e => RandomData(DoughnutChart)"><i class="fa fa-slack"></i><span>随机数据</span></button>
@@ -103,7 +107,9 @@
 </Block>
 
 <Block Title="Bubble 图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>bubble</code> 图">
-    <Chart ChartType="ChartType.Bubble" OnInit="@(() => OnBubbleInit(BubbleDatasetCount, BubbleDataCount))" @ref="BubbleChart" />
+    <div style="@css1">
+        <Chart ChartType="ChartType.Bubble" OnInit="@(() => OnBubbleInit(BubbleDatasetCount, BubbleDataCount))" @ref="BubbleChart" />
+    </div>
     <div class="text-center mt-2 chart">
         <div class="btn-group">
             <button class="btn btn-primary" @onclick="e => RandomData(BubbleChart)"><i class="fa fa-snowflake-o"></i><span>随机数据</span></button>
@@ -139,6 +145,8 @@
     private int DoughnutDataCount = 5;
 
     private int BubbleDataCount = 7;
+
+    private string css1 = "width: calc(40%); display: block;margin: 0 auto;";
 
     /// <summary>
     /// 获得/设置 版本号字符串
