@@ -69,6 +69,17 @@ namespace BootstrapBlazor.Shared.Pages
             //全局曲线率
             ds.Options.Tension = 0.4;
 
+            ds.Options.Colors = new Dictionary<string, string>() {
+                                    { "blue:", "rgb(54, 162, 235)" },
+                                    { "green:", "rgb(75, 192, 192)" },
+                                    { "red:", "rgb(255, 99, 132)" },
+                                    { "orange:", "rgb(255, 159, 64)" },
+                                    { "yellow:", "rgb(255, 205, 86)" },
+                                    { "tomato:", "rgb(255, 99, 71)" },
+                                    { "pink:", "rgb(255, 192, 203)" },
+                                    { "violet:", "rgb(238, 130, 238)" },
+                                };
+
             ds.Labels = Enumerable.Range(1, daCount).Select(i => i.ToString());
 
             for (var index = 0; index < dsCount; index++)

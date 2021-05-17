@@ -60,7 +60,8 @@
     $.extend({
         getChartOption: function (option) {
             var colors = [];
-            for (var name in window.chartColors) colors.push(name);
+            var chartColors = option.options.colors ?? window.chartColors;
+            for (var name in chartColors) colors.push(name);
 
             var config = {};
             var colorFunc = null;
