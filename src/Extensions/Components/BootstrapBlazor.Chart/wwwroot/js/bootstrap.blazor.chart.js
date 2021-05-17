@@ -80,10 +80,11 @@
                         });
                     });
                 }
+
                 config = $.extend(true, {}, chartOption);
                 colorFunc = function (data) {
                     var color = chartColors[colors.shift()]
-                    $.extend(data, {
+                    $.extend(data, {                  
                         backgroundColor: color,
                         borderColor: color
                     });
@@ -157,7 +158,7 @@
                 colorFunc(this);
             });
 
-            console.log("stacked",option.options?.xAxes[0]?.stacked);
+            console.log("stacked", option.options?.xAxes[0]?.stacked);
 
             return $.extend(true, config, {
                 type: option.type,
@@ -168,6 +169,15 @@
                 options: {
                     responsive: option.options.responsive,
                     title: option.options.title,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: option.options.title.display,
+                            text: option.options.title.text
+                        }
+                    },
                     scales: {
                         xAxes: {
                             stacked: option.options?.xAxes[0]?.stacked,
