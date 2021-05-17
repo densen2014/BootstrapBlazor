@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * Chart.js v3.2.1
  * https://www.chartjs.org
  * (c) 2021 Chart.js Contributors
@@ -6395,6 +6395,7 @@ const getChart = (key) => {
 };
 class Chart {
   constructor(item, config) {
+    console.log("New Chart ", config)
     const me = this;
     this.config = config = new Config(config);
     const initialCanvas = getCanvas(item);

@@ -150,13 +150,14 @@
                         borderColor: color
                     });
                 }
+                console.log("bubble ", config)
             }
 
             $.each(option.data, function () {
                 colorFunc(this);
             });
 
-            console.log(option.options.xAxes[0].stacked);
+            console.log("stacked",option.options?.xAxes[0]?.stacked);
 
             return $.extend(true, config, {
                 type: option.type,
@@ -169,12 +170,12 @@
                     title: option.options.title,
                     scales: {
                         xAxes: {
-                            stacked: option.options.xAxes[0].stacked,
+                            stacked: option.options?.xAxes[0]?.stacked,
                             display: option.options.showXAxesLine,
                             scaleLabel: option.options.xAxes
                         },
                         yAxes: {
-                            stacked: option.options.yAxes[0].stacked,
+                            stacked: option.options?.yAxes[0]?.stacked,
                             display: option.options.showXAxesLine,
                             scaleLabel: option.options.yAxes
                         }
