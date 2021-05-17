@@ -44,6 +44,16 @@ namespace BootstrapBlazor.Shared.Pages
 
         private bool IsCricle { get; set; }
 
+        /// <summary>
+        /// 是否合并Bar显示
+        /// </summary>
+        private bool IsStacked { get; set; } = true;
+
+        /// <summary>
+        /// 强刷显示控件控制,Hack一下
+        /// </summary>
+        private bool Show { get; set; } = true;
+
         private IEnumerable<string> Colors { get; set; } = new List<string>() { "Red", "Blue", "Green", "Orange", "Yellow", "Tomato", "Pink", "Violet" };
 
         /// <summary>
@@ -61,11 +71,16 @@ namespace BootstrapBlazor.Shared.Pages
             }
         }
 
-        private static Task<ChartDataSource> OnInit(int dsCount, int daCount)
+        private Task<ChartDataSource> OnInit(int dsCount, int daCount, bool? isStacked = null)
         {
             var ds = new ChartDataSource();
-            ds.Options.XAxes.Add(new ChartAxes() { LabelString = "天数", Stacked = true });
-            ds.Options.YAxes.Add(new ChartAxes() { LabelString = "数值", Stacked = true });
+            IsStacked = isStacked ?? IsStacked;
+            if (IsStacked)
+            {
+                ds.Options.Title.Text = "合并Bar";
+            }
+            ds.Options.XAxes.Add(new ChartAxes() { LabelString = "天数", Stacked = IsStacked });
+            ds.Options.YAxes.Add(new ChartAxes() { LabelString = "数值", Stacked = IsStacked });
 
             ds.Labels = Enumerable.Range(1, daCount).Select(i => i.ToString());
 
@@ -225,6 +240,30 @@ namespace BootstrapBlazor.Shared.Pages
             IsCricle = !IsCricle;
             DoughnutChart?.SetAngle(IsCricle ? 360 : 0);
             DoughnutChart?.Update("setAngle");
+        }
+
+        /// <summary>
+        /// 切换合并显示
+        /// </summary>
+        /// <param name="chart"></param>
+        private void SwitchStacked(Chart? chart)
+        {
+            IsStacked = !IsStacked;
+            ReloadChart(chart);
+        }
+
+        /// <summary>
+        /// 强刷控件,重新初始化控件外观
+        /// </summary>
+        /// <param name="chart"></param>
+        private async void ReloadChart(Chart? chart)
+        {
+            Show = false;
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(1);
+            Show = true;
+            await InvokeAsync(StateHasChanged);
+            chart?.Update();
         }
 
         /// <summary>

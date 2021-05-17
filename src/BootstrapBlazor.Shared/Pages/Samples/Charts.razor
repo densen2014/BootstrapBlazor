@@ -73,6 +73,8 @@
             <button class="btn btn-primary" @onclick="e => RemoveData(BarChart, ref BarDataCount)"><i class="fa fa-minus"></i><span>移除数据</span></button>
         </div>
     </div>
+    <br />
+    <a href="/Charts_test"><Badge Color="Color.Info">Bar合并显示</Badge></a>
 </Block>
 
 <Block Title="Pie 图" Introduction="通过设置 <code>ChartType</code> 更改图表为 <code>pie</code> 图">
@@ -146,7 +148,8 @@
 
     private int BubbleDataCount = 7;
 
-    private string css1 = "width: calc(40%); display: block;margin: 0 auto;";
+    private string css1 = "width: calc(30%);";
+    //private string css1 = "width: calc(40%); display: block;margin: 0 auto;";
 
     /// <summary>
     /// 获得/设置 版本号字符串
