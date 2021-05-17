@@ -79,6 +79,7 @@ namespace BootstrapBlazor.Shared.Pages
                 });
             }
             ds.Data.FirstOrDefault().Tension = 1.0;
+            ds.Data[1].Tension = 0.4d;
 
             return Task.FromResult(ds);
         }
