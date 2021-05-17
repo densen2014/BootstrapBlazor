@@ -64,8 +64,8 @@ namespace BootstrapBlazor.Shared.Pages
         private static Task<ChartDataSource> OnInit(int dsCount, int daCount)
         {
             var ds = new ChartDataSource();
-            ds.Options.XAxes.Add(new ChartAxes() { LabelString = "天数" });
-            ds.Options.YAxes.Add(new ChartAxes() { LabelString = "数值" });
+            ds.Options.XAxes.Add(new ChartAxes() { LabelString = "天数", Stacked = true });
+            ds.Options.YAxes.Add(new ChartAxes() { LabelString = "数值", Stacked = true });
 
             ds.Labels = Enumerable.Range(1, daCount).Select(i => i.ToString());
 

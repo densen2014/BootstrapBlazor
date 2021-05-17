@@ -90,14 +90,14 @@
                 }
             }
             else if (option.type === 'bar') {
-                chartOption.scales = $.extend(true, chartOption.scales, {
-                    x: {
-                        stacked: true,
-                    },
-                    y: {
-                        stacked: true
-                    }
-                });
+                //chartOption.scales = $.extend(true, chartOption.scales, {
+                //    x: {
+                //        stacked: true,
+                //    },
+                //    y: {
+                //        stacked: true
+                //    }
+                //});
                 config = $.extend(true, {}, chartOption);
                 console.log(config);
                 colorFunc = function (data) {
@@ -156,6 +156,8 @@
                 colorFunc(this);
             });
 
+            console.log(option.options.xAxes[0].stacked);
+
             return $.extend(true, config, {
                 type: option.type,
                 data: {
@@ -166,19 +168,31 @@
                     responsive: option.options.responsive,
                     title: option.options.title,
                     scales: {
-                        xAxes: option.options.xAxes.map(function (v) {
-                            return {
-                                display: option.options.showXAxesLine,
-                                scaleLabel: v
-                            };
-                        }),
-                        yAxes: option.options.yAxes.map(function (v) {
-                            return {
-                                display: option.options.showYAxesLine,
-                                scaleLabel: v
-                            }
-                        })
-                    }
+                        xAxes: {
+                            stacked: option.options.xAxes[0].stacked,
+                            display: option.options.showXAxesLine,
+                            scaleLabel: option.options.xAxes
+                        },
+                        yAxes: {
+                            stacked: option.options.yAxes[0].stacked,
+                            display: option.options.showXAxesLine,
+                            scaleLabel: option.options.yAxes
+                        }
+                    }//,
+                    //scales: {
+                    //    xAxes: option.options.xAxes.map(function (v) {
+                    //        return {
+                    //            display: option.options.showXAxesLine,
+                    //            scaleLabel: v
+                    //        };
+                    //    }),
+                    //    yAxes: option.options.yAxes.map(function (v) {
+                    //        return {
+                    //            display: option.options.showYAxesLine,
+                    //            scaleLabel: v
+                    //        }
+                    //    })
+                    //}
                 }
             });
         },
@@ -235,6 +249,7 @@
                 var chart = $el.data('chart');
                 if (!chart) {
                     var op = $.getChartOption(option);
+                    console.log("chart ", op)
                     $el.data('chart', chart = new Chart(el.getElementsByTagName('canvas'), op));
                     $el.removeClass('is-loading').trigger('chart.afterInit');
                     obj.invokeMethodAsync(method);

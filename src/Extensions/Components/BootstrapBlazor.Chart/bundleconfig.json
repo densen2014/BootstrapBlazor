@@ -17,7 +17,7 @@
   {
     "outputFileName": "wwwroot/js/bootstrap.blazor.chart.bundle.min.js",
     "inputFiles": [
-      "wwwroot/js/chart.min.js",
+      "wwwroot/js/chart.js",
       "wwwroot/js/bootstrap.blazor.chart.js"
     ],
     "minify": {
