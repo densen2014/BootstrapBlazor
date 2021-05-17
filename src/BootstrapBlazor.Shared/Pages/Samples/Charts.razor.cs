@@ -66,6 +66,7 @@ namespace BootstrapBlazor.Shared.Pages
             var ds = new ChartDataSource();
             ds.Options.XAxes.Add(new ChartAxes() { LabelString = "天数" });
             ds.Options.YAxes.Add(new ChartAxes() { LabelString = "数值" });
+            //全局曲线率
             ds.Options.Tension = 0.4;
 
             ds.Labels = Enumerable.Range(1, daCount).Select(i => i.ToString());
@@ -78,8 +79,11 @@ namespace BootstrapBlazor.Shared.Pages
                     Data = Enumerable.Range(1, daCount).Select(i => Randomer.Next(20, 37)).Cast<object>()
                 });
             }
+
+            #region 单独设置每条数据曲线率
             ds.Data.FirstOrDefault().Tension = 1.0;
             ds.Data[1].Tension = 0.4d;
+            #endregion 
 
             return Task.FromResult(ds);
         }
