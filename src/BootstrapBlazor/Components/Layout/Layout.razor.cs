@@ -18,6 +18,8 @@ namespace BootstrapBlazor.Components
     {
         private JSInterop<Layout>? Interop { get; set; }
 
+        private bool IsAuthenticated { get; set; }
+
         /// <summary>
         /// 获得 组件样式
         /// </summary>
@@ -94,6 +96,25 @@ namespace BootstrapBlazor.Components
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+
+            if (AuthenticationStateTask != null)
+            {
+                var state = await AuthenticationStateTask;
+                IsAuthenticated = state.User.Identity?.IsAuthenticated ?? false;
+            }
+            else
+            {
+                IsAuthenticated = true;
+            }
+        }
+
+        /// <summary>
         /// OnAfterRenderAsync 方法
         /// </summary>
         /// <param name="firstRender"></param>
@@ -132,7 +153,7 @@ namespace BootstrapBlazor.Components
         {
             if (disposing && IsRendered && Interop != null)
             {
-                await Interop.InvokeVoidAsync(this, null, "bb_layout", "dispose").ConfigureAwait(false);
+                await Interop.InvokeVoidAsync(this, null, "bb_layout", "dispose");
                 Interop.Dispose();
                 Interop = null;
             }
@@ -144,7 +165,7 @@ namespace BootstrapBlazor.Components
         /// <returns></returns>
         public async ValueTask DisposeAsync()
         {
-            await DisposeAsyncCore(true).ConfigureAwait(false);
+            await DisposeAsyncCore(true);
             GC.SuppressFinalize(this);
         }
     }

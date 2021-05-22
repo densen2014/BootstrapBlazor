@@ -35,6 +35,7 @@ namespace BootstrapBlazor.Components
         protected string? WrapperClassName => CssBuilder.Default()
             .AddClass("table-bordered", IsBordered)
             .AddClass("table-striped table-hover", IsStriped)
+            .AddClass("border-dark", HeaderStyle == TableHeaderStyle.Dark)
             .AddClass("is-clickable", ClickToSelect || DoubleClickToEdit || OnClickRowCallback != null || OnDoubleClickRowCallback != null)
             .AddClass("table-scroll", !Height.HasValue)
             .AddClass("table-fixed", Height.HasValue)
@@ -535,23 +536,30 @@ namespace BootstrapBlazor.Components
                     methodName = null;
                 }
 
-                if (IsAutoRefresh && AutoRefreshInterval > 500 && AutoRefreshCancelTokenSource == null)
+                if (IsAutoRefresh && AutoRefreshInterval > 500)
                 {
-                    AutoRefreshCancelTokenSource = new CancellationTokenSource();
-
+                    AutoRefreshCancelTokenSource ??= new CancellationTokenSource();
                     // 自动刷新功能
                     _ = Task.Run(async () =>
                     {
                         try
                         {
-                            while (!(AutoRefreshCancelTokenSource?.IsCancellationRequested ?? true))
+                            await Task.Delay(AutoRefreshInterval, AutoRefreshCancelTokenSource.Token);
+                            if (!AutoRefreshCancelTokenSource.IsCancellationRequested)
                             {
                                 await InvokeAsync(QueryAsync);
-                                await Task.Delay(AutoRefreshInterval, AutoRefreshCancelTokenSource?.Token ?? new CancellationToken(true));
                             }
                         }
                         catch (TaskCanceledException) { }
                     });
+                }
+                else
+                {
+                    if (AutoRefreshCancelTokenSource != null)
+                    {
+                        AutoRefreshCancelTokenSource.Cancel();
+                        AutoRefreshCancelTokenSource = null;
+                    }
                 }
             }
         }

@@ -29,9 +29,11 @@
     "NotFoundDevicesString": "Not found video device"
   },
   "BootstrapBlazor.Components.Calendar": {
+    "PreviousYear": "Previous Year",
     "PreviousMonth": "Previous Month",
     "Today": "Today",
     "NextMonth": "Next Month",
+    "NextYear": "Next Year",
     "PreviousWeek": "Previous Week",
     "WeekText": "Week",
     "NextWeek": "Next Week",
@@ -116,6 +118,12 @@
   },
   "BootstrapBlazor.Components.Layout": {
     "TooltipText": "Click to Expand/Collapse sidebar"
+  },
+  "BootstrapBlazor.Components.Menu": {
+    "InvalidOperationExceptionMessage": "Sidemenu component cannot be used independently. Please use Menu component to set IsVertical = true"
+  },
+  "BootstrapBlazor.Components.ModalDialog": {
+    "CloseButtonText": "Close"
   },
   "BootstrapBlazor.Components.MultiSelect": {
     "PlaceHolder": "Click for select ...",
@@ -257,5 +265,8 @@
     "BrowserButtonText": "Browser",
     "FileExtensions": "File must have one of the following extensions: {0}",
     "FileSizeValidation": "File size must less {0}"
+  },
+  "BootstrapBlazor.Components.Empty": {
+    "Description": "No description"
   }
 }

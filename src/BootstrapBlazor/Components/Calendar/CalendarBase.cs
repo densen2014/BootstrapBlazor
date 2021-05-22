@@ -94,6 +94,16 @@ namespace BootstrapBlazor.Components
         });
 
         /// <summary>
+        /// 右侧快捷切换年按钮回调此方法
+        /// </summary>
+        /// <param name="offset"></param>
+        protected void OnChangeYear(int offset)
+        {
+            if (offset == 0) Value = DateTime.Today;
+            else Value = Value.AddYears(offset);
+        }
+
+        /// <summary>
         /// 右侧快捷切换月按钮回调此方法
         /// </summary>
         /// <param name="offset"></param>
@@ -111,28 +121,6 @@ namespace BootstrapBlazor.Components
         {
             if (offset == 0) Value = DateTime.Today;
             else Value = Value.AddDays(offset);
-        }
-
-        /// <summary>
-        /// 获得 周日期
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <returns></returns>
-        protected string GetWeekDayString(int offset)
-        {
-            return $"{Value.AddDays(offset - (int)Value.DayOfWeek).Day}";
-        }
-
-        /// <summary>
-        /// 获得 周日期样式
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <returns></returns>
-        protected string? GetWeekDayClassString(int offset)
-        {
-            return CssBuilder.Default("week-header")
-                .AddClass("is-today", Value.AddDays(offset - (int)Value.DayOfWeek) == DateTime.Today)
-                .Build();
         }
     }
 }

@@ -3,8 +3,10 @@
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -60,6 +62,7 @@ namespace BootstrapBlazor.Components
         /// 获得/设置 Main 模板
         /// </summary>
         [Parameter]
+        [NotNull]
         public RenderFragment? Main { get; set; }
 
         /// <summary>
@@ -85,6 +88,12 @@ namespace BootstrapBlazor.Components
         /// </summary>
         [Parameter]
         public bool UseTabSet { get; set; }
+
+        /// <summary>
+        /// 获得/设置 TabItem 显示文本字典 默认 null 未设置时取侧边栏菜单显示文本
+        /// </summary>
+        [Parameter]
+        public Dictionary<string, string>? TabItemTextDictionary { get; set; }
 
         /// <summary>
         /// 获得/设置 排除地址支持通配符
@@ -138,7 +147,13 @@ namespace BootstrapBlazor.Components
         /// 获得/设置 收缩展开回调委托
         /// </summary>
         [Parameter]
-        public Func<bool, Task> OnCollapsed { get; set; } = b => Task.CompletedTask;
+        public Func<bool, Task>? OnCollapsed { get; set; }
+
+        /// <summary>
+        /// 获得 登录授权信息
+        /// </summary>
+        [CascadingParameter]
+        protected Task<AuthenticationState>? AuthenticationStateTask { get; set; }
 
         /// <summary>
         /// 点击 收缩展开按钮时回调此方法
@@ -147,7 +162,7 @@ namespace BootstrapBlazor.Components
         protected async Task CollapseMenu()
         {
             IsCollapsed = !IsCollapsed;
-            await OnCollapsed.Invoke(IsCollapsed);
+            if(OnCollapsed != null) await OnCollapsed(IsCollapsed);
         }
 
         /// <summary>

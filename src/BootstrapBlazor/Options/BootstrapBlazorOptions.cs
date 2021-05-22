@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
+using BootstrapBlazor.Localization.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -33,7 +34,13 @@ namespace BootstrapBlazor.Components
         /// <summary>
         /// 获得/设置 回落默认语言文化 默认为 en 英文
         /// </summary>
+        [Obsolete("请使用 FallbackCulture 属性，此属性下一个版本移除")]
         public string FallbackCultureName { get; set; } = "en";
+
+        /// <summary>
+        /// 获得/设置 回落默认语言文化 默认为 en 英文
+        /// </summary>
+        public string FallbackCulture { get; set; } = "en";
 
         /// <summary>
         /// 获得/设置 Toast 组件全局弹窗默认位置 默认为 null 当设置值后覆盖整站设置
@@ -41,9 +48,14 @@ namespace BootstrapBlazor.Components
         public Placement? ToastPlacement { get; set; }
 
         /// <summary>
-        /// 获得 组件内置本地化语言列表
+        /// 获得/设置 组件内置本地化语言列表 默认为 null
         /// </summary>
-        public List<string> SupportedCultures { get; set; } = new List<string>() { "zh", "en" };
+        public List<string>? SupportedCultures { get; set; }
+
+        /// <summary>
+        /// 获得/设置 是否回落到 UI 父文化 默认为 true
+        /// </summary>
+        public bool FallBackToParentUICultures { get; set; } = true;
 
         /// <summary>
         /// 获得/设置 网站主题集合
@@ -58,33 +70,10 @@ namespace BootstrapBlazor.Components
         /// 获得支持多语言集合
         /// </summary>
         /// <returns></returns>
-        public List<CultureInfo> GetSupportedCultures()
+        public IList<CultureInfo> GetSupportedCultures()
         {
-            _cultures ??= new Lazy<List<CultureInfo>>(() =>
-            {
-                // 循环过滤掉上级文化
-                var ret = new List<CultureInfo>();
-                foreach (var name in SupportedCultures)
-                {
-                    var culture = new CultureInfo(name);
-                    if (!ret.Any(c => c.Name == culture.Name))
-                    {
-                        ret.Add(culture);
-                    }
-
-                    while (culture != culture.Parent)
-                    {
-                        culture = culture.Parent;
-                        var p = ret.FirstOrDefault(c => c.Name == culture.Name);
-                        if (p != null)
-                        {
-                            ret.Remove(p);
-                        }
-                    }
-                }
-                return ret;
-            });
-
+            // 用户设置时使用用户设置，未设置时使用内置中英文文化
+            _cultures ??= new Lazy<List<CultureInfo>>(() => SupportedCultures?.Select(name => new CultureInfo(name)).ToList() ?? JsonLocalizationOptions.SupportedCultures);
             return _cultures.Value;
         }
     }

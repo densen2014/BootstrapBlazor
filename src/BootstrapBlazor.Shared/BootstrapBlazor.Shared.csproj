@@ -10,15 +10,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Locales\**\*.json" />
-    <EmbeddedResource Include="Locales\**\*.json" />
+    <Content Remove="Locales\*.json" />
+    <EmbeddedResource Include="Locales\*.json" />
     <Content Remove="docs.json" />
     <EmbeddedResource Include="docs.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BootstrapBlazor.Markdown" Version="5.0.16" />
-    <PackageReference Include="BootstrapBlazor.TableExport" Version="5.0.16" />
+    <PackageReference Include="BootstrapBlazor.Chart" Version="5.0.18" />
+    <PackageReference Include="BootstrapBlazor.Markdown" Version="5.0.18" />
+    <PackageReference Include="BootstrapBlazor.TableExport" Version="5.0.18" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 

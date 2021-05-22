@@ -56,6 +56,9 @@
     "ShowBarUsageText": "显示左侧 Bar",
     "IntroText4": "作为 <code>Tip</code> 使用"
   },
+  "BootstrapBlazor.Shared.Pages.Selects": {
+    "PlaceHolder": "未选择"
+  },
   "BootstrapBlazor.Shared.Pages.QRCodes": {
     "Title": "QRCode 二维码",
     "SubTitle": "用于二维码生成",
@@ -229,6 +232,7 @@
     "Tree": "树形组件 Tree",
     "Table": "表格组件",
     "TableBase": "基本功能",
+    "TableRow": "行设置",
     "TableColumn": "列设置",
     "TableDetail": "明细行",
     "TableSearch": "搜索功能",
@@ -246,6 +250,40 @@
     "TableDialog": "弹窗联动",
     "TableWrap": "折行演示",
     "TableTree": "树形数据",
-    "TableLaoding": "数据加载"
+    "TableLaoding": "数据加载",
+    "MenuAccordion": "手风琴效果",
+    "MenuExpandAll": "全部展开",
+    "Empty": "空状态 Empty"
+  },
+  "BootstrapBlazor.Shared.Pages.Menus": {
+    "System": "系统设置",
+    "Website": "网站设置",
+    "Task": "任务设置",
+    "Authorize": "权限设置",
+    "User": "用户设置",
+    "Menu": "菜单设置",
+    "Role": "角色设置",
+    "Log": "日志设置",
+    "Access": "访问日志",
+    "Login": "登录日志",
+    "Operation": "操作日志",
+    "Menu1": "菜单一",
+    "Menu2": "菜单二",
+    "Menu3": "菜单三",
+    "SubMenu1": "子菜单 1",
+    "SubMenu2": "子菜单 2",
+    "SubMenu3": "子菜单 3",
+    "SubMenu11": "孙菜单 11",
+    "SubMenu12": "孙菜单 12",
+    "SubMenu21": "孙菜单 21",
+    "SubMenu22": "孙菜单 22",
+    "SubMenu31": "曾孙菜单 31",
+    "SubMenu32": "曾孙菜单 32",
+    "SubMenu41": "曾曾孙菜单 41",
+    "SubMenu42": "曾曾孙菜单 42"
+  },
+  "BootstrapBlazor.Shared.Pages.Emptys": {
+    "Title": "Empty 空状态",
+    "subTitle": "空状态时的展示占位图"
   }
 }

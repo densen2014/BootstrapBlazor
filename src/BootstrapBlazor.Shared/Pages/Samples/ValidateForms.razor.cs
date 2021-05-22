@@ -37,7 +37,8 @@ namespace BootstrapBlazor.Shared.Pages
         [NotNull]
         private IStringLocalizer<Foo>? LocalizerFoo { get; set; }
 
-        private Foo Model { get; set; } = new() { Name = "Name", Education = EnumEducation.Primary, DateTime = DateTime.Now };
+        [NotNull]
+        private Foo? Model { get; set; }
 
         [NotNull]
         private IEnumerable<SelectedItem>? Hobbys { get; set; }
@@ -51,12 +52,18 @@ namespace BootstrapBlazor.Shared.Pages
         [NotNull]
         private ComplexFoo? ComplexModel { get; set; }
 
-        /// <summary>baise
-        /// OnInitialized 方法
+        /// <summary>
+        /// OnInitializedAsync 方法
         /// </summary>
-        protected override void OnInitialized()
+        /// <returns></returns>
+        protected override async Task OnInitializedAsync()
         {
-            base.OnInitialized();
+            await base.OnInitializedAsync();
+
+            // 切换线程 模拟异步通过 webapi 加载数据
+            await Task.Yield();
+
+            Model = new() { Name = "Name", Education = EnumEducation.Primary, DateTime = DateTime.Now };
 
             // 初始化参数
             Hobbys = Foo.GenerateHobbys(LocalizerFoo);
@@ -68,7 +75,13 @@ namespace BootstrapBlazor.Shared.Pages
 
         private Task OnInvalidSubmit1(EditContext context)
         {
-            Trace.Log("OnInvalidSubmit 回调委托");
+            Trace.Log("OnInvalidSubmit 回调委托: 验证未通过");
+            return Task.CompletedTask;
+        }
+
+        private Task OnValidSubmit1(EditContext context)
+        {
+            Trace.Log("OnValidSubmit 回调委托: 验证通过");
             return Task.CompletedTask;
         }
 
@@ -109,6 +122,37 @@ namespace BootstrapBlazor.Shared.Pages
             FooForm.SetError<Foo>(f => f.Name, "数据库中已存在");
             return Task.CompletedTask;
         }
+
+        #region 动态更改表单内验证组件
+        [NotNull]
+        private Logger? Trace5 { get; set; }
+
+        private bool ShowAddress { get; set; }
+
+        private Foo DynamicModel { get; set; } = new Foo();
+
+        private Task OnInvalidDynamicModel(EditContext context)
+        {
+            Trace5.Log("OnInvalidSubmit 回调委托");
+            return Task.CompletedTask;
+        }
+
+        private Task OnValidDynamicModel(EditContext context)
+        {
+            Trace5.Log("OnValidSubmit 回调委托");
+            return Task.CompletedTask;
+        }
+
+        private void OnValidateChange()
+        {
+            ShowAddress = true;
+        }
+
+        private void OnValidateReset()
+        {
+            ShowAddress = false;
+        }
+        #endregion
 
         private class ComplexFoo : Foo
         {
@@ -161,13 +205,6 @@ namespace BootstrapBlazor.Shared.Pages
                 DefaultValue = " — "
             },
             new AttributeItem() {
-                Name = "OnSubmit",
-                Description = "表单提交时的回调委托",
-                Type = "EventCallback<EditContext>",
-                ValueList = " — ",
-                DefaultValue = " — "
-            },
-            new AttributeItem() {
                 Name = "OnValidSubmit",
                 Description = "表单提交时数据合规检查通过时的回调委托",
                 Type = "EventCallback<EditContext>",
@@ -191,10 +228,10 @@ namespace BootstrapBlazor.Shared.Pages
         {
             new MethodItem()
             {
-                Name = "Validate",
-                Description="表单验证方法",
-                Parameters =" — ",
-                ReturnValue = "Task<bool>"
+                Name = "SetError",
+                Description="设置验证失败方法",
+                Parameters ="PropertyName, ErrorMessage",
+                ReturnValue = " — "
             }
         };
         #endregion

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -149,6 +150,7 @@ namespace BootstrapBlazor.Components
         /// 获得/设置 类型转化失败格式化字符串 默认为 null
         /// </summary>
         [Parameter]
+        [NotNull]
         public string? ParsingErrorMessage { get; set; }
 
         private string? _id;
@@ -206,27 +208,20 @@ namespace BootstrapBlazor.Components
         /// <param name="result">An instance of <typeparamref name="TValue"/>.</param>
         /// <param name="validationErrorMessage">If the value could not be parsed, provides a validation error message.</param>
         /// <returns>True if the value could be parsed; otherwise false.</returns>
-        protected virtual bool TryParseValueFromString(string value, out TValue result, out string? validationErrorMessage)
+        protected virtual bool TryParseValueFromString(string value, [MaybeNullWhen(false)] out TValue result, out string? validationErrorMessage)
         {
             var ret = false;
             validationErrorMessage = null;
             try
             {
-                var valueType = typeof(TValue);
-                var isBoolean = valueType == typeof(bool) || valueType == typeof(bool?);
-                var v = isBoolean ? (object)value.Equals("true", StringComparison.CurrentCultureIgnoreCase) : value;
-
-                if (BindConverter.TryConvertTo<TValue>(v, CultureInfo.InvariantCulture, out var v1))
+                if (value.TryConvertTo<TValue>(out result))
                 {
-                    result = v1;
                     ret = true;
                 }
                 else
                 {
                     result = default!;
-                    var fieldName = FieldIdentifier?.GetDisplayName() ?? "";
-                    var typeName = typeof(TValue).GetTypeDesc();
-                    validationErrorMessage = ParsingErrorMessage ?? $"The {fieldName} field is not valid.";
+                    validationErrorMessage = FormatParsingErrorMessage();
                 }
             }
             catch (Exception ex)
@@ -237,7 +232,15 @@ namespace BootstrapBlazor.Components
             return ret;
         }
 
-        private bool HasRequired() => FieldIdentifier?.Model.GetType().GetProperty(FieldIdentifier.Value.FieldName)?.GetCustomAttribute<RequiredAttribute>() != null;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string? FormatParsingErrorMessage() => ParsingErrorMessage;
+
+        private bool HasRequired() => FieldIdentifier?.Model.GetType()
+            .GetProperties().Where(x => x.Name == FieldIdentifier.Value.FieldName).FirstOrDefault()
+            ?.GetCustomAttribute<RequiredAttribute>() != null;
 
         /// <summary>
         /// Gets a string that indicates the status of the field being edited. This will include
@@ -288,7 +291,7 @@ namespace BootstrapBlazor.Components
 
             if (ValidateForm != null && FieldIdentifier.HasValue)
             {
-                ValidateForm.AddValidator(FieldIdentifier.Value, this);
+                ValidateForm.AddValidator((FieldIdentifier.Value.FieldName, ModelType: FieldIdentifier.Value.Model.GetType()), (FieldIdentifier.Value, this));
             }
         }
 
@@ -437,6 +440,24 @@ namespace BootstrapBlazor.Components
             {
                 AdditionalAttributes["aria-invalid"] = !valid;
             }
+        }
+
+        /// <summary>
+        /// DisposeAsyncCore 方法
+        /// </summary>
+        /// <param name="disposing"></param>
+        /// <returns></returns>
+        protected override async ValueTask DisposeAsyncCore(bool disposing)
+        {
+            if (disposing)
+            {
+                if (ValidateForm != null && FieldIdentifier.HasValue)
+                {
+                    ValidateForm.TryRemoveValidator((FieldIdentifier.Value.FieldName, FieldIdentifier.Value.Model.GetType()), out _);
+                }
+            }
+
+            await base.DisposeAsyncCore(disposing);
         }
         #endregion
     }

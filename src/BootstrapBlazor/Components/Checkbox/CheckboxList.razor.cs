@@ -20,13 +20,14 @@ namespace BootstrapBlazor.Components
     /// <summary>
     /// CheckboxList 组件基类
     /// </summary>
-    public sealed partial class CheckboxList<TValue>
+    public partial class CheckboxList<TValue>
     {
         /// <summary>
         /// 获得 组件样式
         /// </summary>
         private string? ClassString => CssBuilder.Default("checkbox-list form-control")
             .AddClass("no-border", !ShowBorder && ValidCss != "is-invalid")
+            .AddClass("is-vertical", IsVertical)
             .AddClass(CssClass)
             .AddClass("is-invalid", IsValid.HasValue && !IsValid.Value)
             .Build();
@@ -58,6 +59,12 @@ namespace BootstrapBlazor.Components
         public bool ShowBorder { get; set; } = true;
 
         /// <summary>
+        /// 获得/设置 是否为竖向排列 默认为 false
+        /// </summary>
+        [Parameter]
+        public bool IsVertical { get; set; } = false;
+
+        /// <summary>
         /// 获得/设置 SelectedItemChanged 方法
         /// </summary>
         [Parameter]
@@ -66,10 +73,6 @@ namespace BootstrapBlazor.Components
         [Inject]
         [NotNull]
         private IStringLocalizerFactory? LocalizerFactory { get; set; }
-
-        [Inject]
-        [NotNull]
-        private IOptions<JsonLocalizationOptions>? Options { get; set; }
 
         /// <summary>
         /// OnInitialized 方法
@@ -100,7 +103,10 @@ namespace BootstrapBlazor.Components
             // 处理 Required 标签
             if (EditContext != null && FieldIdentifier != null)
             {
-                var pi = FieldIdentifier.Value.Model.GetType().GetProperty(FieldIdentifier.Value.FieldName);
+                var pi = FieldIdentifier.Value.Model.GetType()
+                    .GetProperties()
+                    .Where(p => p.Name == FieldIdentifier.Value.FieldName)
+                    .FirstOrDefault();
                 if (pi != null)
                 {
                     var required = pi.GetCustomAttribute<RequiredAttribute>();
@@ -178,16 +184,10 @@ namespace BootstrapBlazor.Components
                 {
                     foreach (var sl in Items.Where(i => i.Active))
                     {
-                        var val = sl.Value;
-                        if (t[0].IsEnum && val != null)
+                        if (sl.Value.TryConvertTo(t[0], out var val))
                         {
-                            instance.Add(Enum.Parse(t[0], val.ToString()));
+                            instance.Add(val);
                         }
-                        else
-                        {
-                            instance.Add(Convert.ChangeType(val, t[0]));
-                        }
-
                     }
                     CurrentValue = (TValue)instance;
                 }

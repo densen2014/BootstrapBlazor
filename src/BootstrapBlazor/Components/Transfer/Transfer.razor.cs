@@ -57,11 +57,6 @@ namespace BootstrapBlazor.Components
         private List<SelectedItem> RightItems { get; set; } = new List<SelectedItem>();
 
         /// <summary>
-        /// 获得/设置 是否按钮点击转移 优化性能使用
-        /// </summary>
-        private bool IsTransfer { get; set; }
-
-        /// <summary>
         /// 获得/设置 组件绑定数据项集合
         /// </summary>
         [Parameter]
@@ -141,7 +136,10 @@ namespace BootstrapBlazor.Components
             // 处理 Required 标签
             if (EditContext != null && FieldIdentifier != null)
             {
-                var pi = FieldIdentifier.Value.Model.GetType().GetProperty(FieldIdentifier.Value.FieldName);
+                var pi = FieldIdentifier.Value.Model.GetType()
+                    .GetProperties()
+                    .Where(p => p.Name == FieldIdentifier.Value.FieldName)
+                    .FirstOrDefault();
                 if (pi != null)
                 {
                     var required = pi.GetCustomAttribute<RequiredAttribute>();
@@ -171,21 +169,7 @@ namespace BootstrapBlazor.Components
                 }
             }
 
-            if (!IsTransfer)
-            {
-                ResetItems();
-            }
-        }
-
-        /// <summary>
-        /// OnAfterRender 方法
-        /// </summary>
-        /// <param name="firstRender"></param>
-        protected override void OnAfterRender(bool firstRender)
-        {
-            base.OnAfterRender(firstRender);
-
-            IsTransfer = false;
+            ResetItems();
         }
 
         /// <summary>
@@ -193,7 +177,6 @@ namespace BootstrapBlazor.Components
         /// </summary>
         private async Task TransferItems(List<SelectedItem> source, List<SelectedItem> target)
         {
-            IsTransfer = true;
             if (!IsDisabled && Items != null)
             {
                 var items = source.Where(i => i.Active).ToList();
@@ -224,10 +207,6 @@ namespace BootstrapBlazor.Components
                 {
                     await OnSelectedItemsChanged.Invoke(RightItems);
                 }
-                if (!ValueChanged.HasDelegate)
-                {
-                    StateHasChanged();
-                }
             }
         }
 
@@ -245,12 +224,12 @@ namespace BootstrapBlazor.Components
             {
                 result = (TValue)(object)value;
             }
-            else if (typeof(TValue) == typeof(IEnumerable<string>))
+            else if (typeof(IEnumerable<string>).IsAssignableFrom(typeof(TValue)))
             {
                 var v = value.Split(",", StringSplitOptions.RemoveEmptyEntries);
-                result = (TValue)(object)v;
+                result = (TValue)(object)new List<string>(v);
             }
-            else if (typeof(TValue) == typeof(IEnumerable<SelectedItem>))
+            else if (typeof(IEnumerable<SelectedItem>).IsAssignableFrom(typeof(TValue)))
             {
                 result = (TValue)(object)RightItems;
             }
@@ -326,7 +305,7 @@ namespace BootstrapBlazor.Components
         /// 更改组件数据源方法
         /// </summary>
         /// <param name="items"></param>
-        [Obsolete("更改数据源 Items 参数即可")]
+        [Obsolete("更改数据源 Items 参数即可，下一个版本移除此方法")]
         public void SetItems(List<SelectedItem>? items)
         {
             Items = items;

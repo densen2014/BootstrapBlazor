@@ -2,7 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
+using Microsoft.AspNetCore.Components;
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Linq;
 
 namespace BootstrapBlazor.Components
 {
@@ -76,10 +80,90 @@ namespace BootstrapBlazor.Components
         public static string GetTypeDesc(this Type t)
         {
             string? ret;
-            if (t.IsEnum) ret = "枚举";
-            else if (t.IsNumber()) ret = "数字";
-            else if (t.IsDateTime()) ret = "日期";
-            else ret = "字符串";
+            if (t.IsEnum)
+            {
+                ret = "枚举";
+            }
+            else if (t.IsNumber())
+            {
+                ret = "数字";
+            }
+            else if (t.IsDateTime())
+            {
+                ret = "日期";
+            }
+            else
+            {
+                ret = "字符串";
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 字符串类型转换为其他数据类型
+        /// </summary>
+        /// <returns></returns>
+        public static bool TryConvertTo(this string? source, Type type, [MaybeNullWhen(false)] out object? val)
+        {
+            var ret = false;
+            if (type == typeof(string))
+            {
+                val = source;
+                ret = true;
+            }
+            else
+            {
+                var methodInfo = typeof(ObjectExtensions).GetMethods().FirstOrDefault(m => m.IsGenericMethod)!.MakeGenericMethod(type);
+                var v = type == typeof(string) ? null : Activator.CreateInstance(type);
+                var args = new object?[] { source, v };
+                ret = (bool)methodInfo.Invoke(null, args)!;
+                val = ret ? args[1] : null;
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public static bool TryConvertTo<TValue>(this string? source, [MaybeNullWhen(false)] out TValue val)
+        {
+            var ret = false;
+            var type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
+            if (type == typeof(string))
+            {
+                val = (TValue)(object)source!;
+                ret = true;
+            }
+            else
+            {
+                try
+                {
+                    if (source == null)
+                    {
+                        val = default;
+                        ret = true;
+                    }
+                    else if (source == string.Empty)
+                    {
+                        ret = BindConverter.TryConvertTo<TValue>(source, CultureInfo.InvariantCulture, out val);
+                    }
+                    else
+                    {
+                        var isBoolean = type == typeof(bool);
+                        var v = isBoolean ? (object)source.Equals("true", StringComparison.CurrentCultureIgnoreCase) : source;
+                        ret = BindConverter.TryConvertTo<TValue>(v, CultureInfo.InvariantCulture, out val);
+                    }
+                }
+                catch
+                {
+                    val = default;
+                }
+            }
             return ret;
         }
 

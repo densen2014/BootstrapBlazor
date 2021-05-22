@@ -360,14 +360,9 @@ namespace BootstrapBlazor.Components
 
                 foreach (var item in SelectedItems)
                 {
-                    var val = item.Value;
-                    if (t.IsEnum && val != null)
+                    if (item.Value.TryConvertTo(t, out var val))
                     {
-                        instance.Add(Enum.Parse(t, val));
-                    }
-                    else
-                    {
-                        instance.Add(Convert.ChangeType(val, t));
+                        instance.Add(val);
                     }
                 }
                 CurrentValue = (TValue)(typeValue.IsGenericType ? instance : listType.GetMethod("ToArray")!.Invoke(instance, null)!);
@@ -472,7 +467,7 @@ namespace BootstrapBlazor.Components
         /// 更改组件数据源方法
         /// </summary>
         /// <param name="items"></param>
-        [Obsolete("更改数据源 Items 参数即可")]
+        [Obsolete("更改数据源 Items 参数即可，下一个版本移除此方法")]
         public void SetItems(List<SelectedItem>? items)
         {
             Items = items;
