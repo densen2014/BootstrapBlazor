@@ -62,5 +62,6 @@ namespace BootstrapBlazor.Components
             { "violet:", "rgb(238, 130, 238)" },
         };
 
+        public bool OnClick { get; set; }
     }
 }
