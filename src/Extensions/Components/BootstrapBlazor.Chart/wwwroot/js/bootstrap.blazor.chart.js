@@ -56,7 +56,8 @@
             },
             onClick: function (c, i) {
                 //var activeElement = chart.getElementAtEvent(evt)
-                console.debug('handleClick', c,i)
+                console.debug('handleClick c', c)
+                console.debug('handleClick i', i)
 
                 e = i[0];
                 console.log(e._index)
