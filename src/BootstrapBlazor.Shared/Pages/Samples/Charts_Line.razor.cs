@@ -39,6 +39,8 @@ namespace BootstrapBlazor.Shared.Pages
         /// </summary>
         private bool Show { get; set; } = true;
 
+        private string ClickItemID { get; set; }
+
         private IEnumerable<string> Colors { get; set; } = new List<string>() { "Red", "Blue", "Green", "Orange", "Yellow", "Tomato", "Pink", "Violet" };
 
         /// <summary>
@@ -171,6 +173,12 @@ namespace BootstrapBlazor.Shared.Pages
         public void ShowToast()
         {
             ToastService?.Show(new ToastOption() { Title = "友情提示", Content = "屏幕宽度过小，如果是手机请横屏观看" });
+        }
+
+        private void OnItemClick(string i)
+        {
+            ClickItemID=$"点击图表项目:{i}";
+            StateHasChanged();
         }
 
         /// <summary>

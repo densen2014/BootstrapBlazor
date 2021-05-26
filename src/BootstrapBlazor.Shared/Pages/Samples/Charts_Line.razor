@@ -9,7 +9,9 @@
 <Block Title="Line 折线图 单独设置每个数据曲线率" Introduction="设置 <code>Tension</code> 贝塞尔曲线的线张力绘制曲线或者直线">
     @if (Show)
     {
-        <Chart OnInit="@(() => OnInit(LineDatasetCount, LineDataCount))" @ref="LineChart" />
+		@ClickItemID
+
+        <Chart OnInit="@(() => OnInit(LineDatasetCount, LineDataCount))" @ref="LineChart"  OnItemClick="@OnItemClick"/>
     }
         <div class="text-center mt-2 chart">
             <div class="btn-group">

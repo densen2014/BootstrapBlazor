@@ -1,4 +1,4 @@
-{
+﻿{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
@@ -26,7 +26,7 @@
     "BootstrapBlazor.WebConsole2": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "Charts",
+      "launchUrl": "Charts_Line",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

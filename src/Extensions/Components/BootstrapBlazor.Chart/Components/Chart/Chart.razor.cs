@@ -16,6 +16,7 @@ namespace BootstrapBlazor.Components
     /// </summary>
     public partial class Chart : BootstrapComponentBase, IDisposable
     {
+
         private JSInterop<Chart>? Interop { get; set; }
 
         /// <summary>
@@ -54,6 +55,12 @@ namespace BootstrapBlazor.Components
         /// </summary>
         [Parameter]
         public Action? OnAfterInit { get; set; }
+
+        /// <summary>
+        /// 获得/设置 点击数据点回调此委托方法
+        /// </summary>
+        [Parameter]
+        public Action<string>? OnItemClick { get; set; }
 
         /// <summary>
         /// 获得/设置 图表组件渲染类型 默认为 line 图
@@ -105,6 +112,7 @@ namespace BootstrapBlazor.Components
                 var ds = await OnInit.Invoke();
 
                 await Interop.InvokeVoidAsync(this, ChartElement, "chart", nameof(Completed), ds, "", ChartType.ToDescriptionString());
+                //await Interop.InvokeVoidAsync(this, ChartElement, "bb_chart_click", nameof(ClickItem));
             }
         }
 
@@ -116,6 +124,17 @@ namespace BootstrapBlazor.Components
         {
             OnAfterInit?.Invoke();
         }
+
+        /// <summary>
+        /// 图表绘制完成后回调此方法
+        /// <param name="i"></param>
+        /// </summary>
+        [JSInvokable]
+        public void ItemClick(string i)
+        {
+            OnItemClick?.Invoke(i);
+        }
+
 
         /// <summary>
         /// 设置 Doughnut 图形显示角度
