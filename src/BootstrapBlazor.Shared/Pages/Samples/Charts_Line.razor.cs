@@ -178,8 +178,8 @@ namespace BootstrapBlazor.Shared.Pages
         private void OnItemClick(string i)
         {
             ClickItemID = $"点击图表项目:{i}";
-            ToastService?.Information(ClickItemID);
             StateHasChanged();
+            ToastService?.Information(ClickItemID);
         }
 
         /// <summary>
