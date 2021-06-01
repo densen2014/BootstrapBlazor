@@ -66,7 +66,7 @@ namespace BootstrapBlazor.Shared.Shared
                 StateHasChanged();
             }
 
-            if (!string.IsNullOrEmpty(item.Text))
+            if (!item.Items.Any() && !string.IsNullOrEmpty(item.Text))
             {
                 await TitleService.SetWebSiteTitle($"{item.Text} - {AppLocalizer["Title"]}");
             }
@@ -114,6 +114,13 @@ namespace BootstrapBlazor.Shared.Shared
                 Icon = "fa fa-fw fa-database"
             };
             AddData(item);
+
+            item = new DemoMenuItem()
+            {
+                Text = Localizer["Charts"],
+                Icon = "fa fa-fw fa-line-chart"
+            };
+            AddChart(item);
 
             item = new DemoMenuItem()
             {
@@ -372,11 +379,6 @@ namespace BootstrapBlazor.Shared.Shared
                 },
                 new()
                 {
-                    Text = Localizer["Chart"],
-                    Url = "charts"
-                },
-                new()
-                {
                     Text = Localizer["Circle"],
                     Url = "circles"
                 },
@@ -395,6 +397,11 @@ namespace BootstrapBlazor.Shared.Shared
                 {
                     Text = Localizer["DropdownWidget"],
                     Url = "dropdownwidgets"
+                },
+                new ()
+                {
+                    Text=Localizer["Empty"],
+                    Url = "empties"
                 },
                 new()
                 {
@@ -459,6 +466,44 @@ namespace BootstrapBlazor.Shared.Shared
                     Text = Localizer["Tree"],
                     Url = "trees"
                 },
+            };
+            AddBadge(item);
+        }
+
+        private void AddChart(DemoMenuItem item)
+        {
+            item.Items = new List<DemoMenuItem>
+            {
+                new()
+                {
+                    Text = Localizer["ChartSummary"],
+                    Url = "charts/index"
+                },
+                new()
+                {
+                    Text = Localizer["ChartLine"],
+                    Url = "charts/line"
+                },
+                new()
+                {
+                    Text = Localizer["ChartBar"],
+                    Url = "charts/bar"
+                },
+                new()
+                {
+                    Text = Localizer["ChartPie"],
+                    Url = "charts/pie"
+                },
+                new()
+                {
+                    Text = Localizer["ChartDoughnut"],
+                    Url = "charts/doughnut"
+                },
+                new()
+                {
+                    Text = Localizer["ChartBubble"],
+                    Url = "charts/bubble"
+                }
             };
             AddBadge(item);
         }
@@ -749,11 +794,6 @@ namespace BootstrapBlazor.Shared.Shared
                 {
                     Text = Localizer["Split"],
                     Url = "splits"
-                },
-                new ()
-                {
-                    Text=Localizer["Empty"],
-                    Url = "empty"
                 }
             };
             AddBadge(item);

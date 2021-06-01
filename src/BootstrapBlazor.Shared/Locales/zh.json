@@ -213,7 +213,6 @@
     "Camera": "摄像头 Camera",
     "Captcha": "验证码 Captcha",
     "Carousel": "走马灯 Carousel",
-    "Chart": "图表 Chart",
     "Circle": "进度环 Circle",
     "Collapse": "折叠 Collapse",
     "Display": "数据显示 Display",
@@ -253,7 +252,14 @@
     "TableLaoding": "数据加载",
     "MenuAccordion": "手风琴效果",
     "MenuExpandAll": "全部展开",
-    "Empty": "空状态 Empty"
+    "Empty": "空状态 Empty",
+    "Charts": "图表 Chart",
+    "ChartSummary": "简介",
+    "ChartLine": "折线图",
+    "ChartBar": "柱状图",
+    "ChartPie": "饼图",
+    "ChartDoughnut": "圆环图",
+    "ChartBubble": "气泡图"
   },
   "BootstrapBlazor.Shared.Pages.Menus": {
     "System": "系统设置",
@@ -282,8 +288,13 @@
     "SubMenu41": "曾曾孙菜单 41",
     "SubMenu42": "曾曾孙菜单 42"
   },
-  "BootstrapBlazor.Shared.Pages.Emptys": {
+  "BootstrapBlazor.Shared.Pages.Empties": {
     "Title": "Empty 空状态",
-    "subTitle": "空状态时的展示占位图"
+    "SubTitle": "空状态时的展示占位图"
+  },
+  "BootstrapBlazor.Shared.Pages.Table.TablesFooter": {
+    "Left": "左对齐",
+    "Center": "居中",
+    "Right": "右对齐"
   }
 }

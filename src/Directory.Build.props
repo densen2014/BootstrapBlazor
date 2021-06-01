@@ -4,9 +4,7 @@
 
   <PropertyGroup>
     <RepositoryUrl>https://github.com/dotnetcore/BootstrapBlazor.git</RepositoryUrl>
-    <PackageProjectUrl>https://argozhang.github.io</PackageProjectUrl>
-    <PackageTags>Bootstrap Blazor WebAssembly wasm UI Components</PackageTags>
-    <Description>Bootstrap UI components for Blazor and Razor Components</Description>
+    <PackageProjectUrl>https://www.blazor.zone</PackageProjectUrl>
     <RepositoryType>github</RepositoryType>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Nullable>enable</Nullable>
@@ -16,16 +14,5 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'net5.0'">
     <NoWarn>1701;1702;CA1816;8620</NoWarn>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
-
-  <ItemGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
-  </ItemGroup>
 
 </Project>

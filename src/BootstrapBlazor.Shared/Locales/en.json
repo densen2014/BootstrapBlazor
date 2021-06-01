@@ -213,7 +213,6 @@
     "Camera": "Camera",
     "Captcha": "Captcha",
     "Carousel": "Carousel",
-    "Chart": "Chart",
     "Circle": "Circle",
     "Collapse": "Collapse",
     "Display": "Display",
@@ -253,7 +252,14 @@
     "TableLaoding": "Table-Loading",
     "MenuAccordion": "Accordion",
     "MenuExpandAll": "Expand",
-    "Empty": "Empty"
+    "Empty": "Empty",
+    "Charts": "Chart",
+    "ChartSummary": "Introduction",
+    "ChartLine": "Line",
+    "ChartBar": "Bar",
+    "ChartPie": "Pie",
+    "ChartDoughnut": "Doughnut",
+    "ChartBubble": "Bubble"
   },
   "BootstrapBlazor.Shared.Pages.Menus": {
     "System": "System",
@@ -282,7 +288,13 @@
     "SubMenu41": "Sub Menu 41",
     "SubMenu42": "Sub Menu 42"
   },
-  "BootstrapBlazor.Shared.Pages.Empty": {
-
+  "BootstrapBlazor.Shared.Pages.Empties": {
+    "Title": "Empty",
+    "SubTitle": "Sub Title PlaceHolder"
+  },
+  "BootstrapBlazor.Shared.Pages.Table.TablesFooter": {
+    "Left": "Left",
+    "Center": "Center",
+    "Right": "Right"
   }
 }
