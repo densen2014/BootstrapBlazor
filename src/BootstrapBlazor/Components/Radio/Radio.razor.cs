@@ -2,7 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Components;
+using System;
 using System.Threading.Tasks;
 
 namespace BootstrapBlazor.Components
@@ -12,37 +13,15 @@ namespace BootstrapBlazor.Components
     /// </summary>
     public partial class Radio
     {
-        private string? RadioClassString => CssBuilder.Default("form-radio-group")
-            .AddClass("is-vertical", IsVertical)
-            .Build();
+        /// <summary>
+        /// 
+        /// </summary>
+        [Parameter]
+        public Func<SelectedItem, Task>? OnClick { get; set; }
 
-        private IEnumerable<SelectedItem> DataItems => Items ?? new SelectedItem[1] {
-            new SelectedItem("", DisplayText ?? "")
-            {
-                Active = State == CheckboxState.Checked
-            }
-        };
-
-        private async Task OnChanged(CheckboxState state, SelectedItem val)
+        private void OnClickHandler()
         {
-            // 子选项点击后，更新其余组件
-            if (!IsDisabled)
-            {
-                // 通知其余兄弟控件
-                if (state == CheckboxState.Checked && Items != null)
-                {
-                    foreach (var item in Items)
-                    {
-                        item.Active = item == val;
-                    }
-
-                    StateHasChanged();
-                }
-
-                // 触发外界 OnStateChanged 事件
-                if (ValueChanged.HasDelegate) await ValueChanged.InvokeAsync(val);
-                if (OnStateChanged != null) await OnStateChanged.Invoke(state, val);
-            }
+            OnClick?.Invoke(Value);
         }
     }
 }

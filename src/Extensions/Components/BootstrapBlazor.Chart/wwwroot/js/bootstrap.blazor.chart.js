@@ -1,15 +1,4 @@
 ﻿(function ($) {
-    window.chartColors = {
-        red: 'rgb(255, 99, 132)',
-        blue: 'rgb(54, 162, 235)',
-        green: 'rgb(75, 192, 192)',
-        orange: 'rgb(255, 159, 64)',
-        yellow: 'rgb(255, 205, 86)',
-        tomato: 'rgb(255, 99, 71)',
-        pink: 'rgb(255, 192, 203)',
-        violet: 'rgb(238, 130, 238)'
-    };
-
     window.chartOption = {
         options: {
             responsive: true,
@@ -60,7 +49,8 @@
     $.extend({
         getChartOption: function (option) {
             var colors = [];
-            for (var name in window.chartColors) colors.push(name);
+            window.chartColors = option.options.colors;
+            for (var name in option.options.colors) colors.push(name);
 
             var config = {};
             var colorFunc = null;
@@ -221,12 +211,12 @@
             else if (option.updateMethod === "setAngle") {
                 if (option.type === 'doughnut') {
                     if (option.angle === 360) {
-                        config.options.circumference = Math.PI;
-                        config.options.rotation = -Math.PI;
+                        config.options.circumference = 360;
+                        config.options.rotation = -360;
                     }
                     else {
-                        config.options.circumference = 2 * Math.PI;
-                        config.options.rotation = -Math.PI / 2;
+                        config.options.circumference = 180;
+                        config.options.rotation = -90;
                     }
                 }
             }

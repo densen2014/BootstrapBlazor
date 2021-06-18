@@ -4,6 +4,8 @@
 
 using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BootstrapBlazor.Components
@@ -117,5 +119,10 @@ namespace BootstrapBlazor.Components
         /// 获得/设置 顺序号
         /// </summary>
         int Order { get; set; }
+
+        /// <summary>
+        /// 获得/设置 单元格回调方法
+        /// </summary>
+        Action<TableCellArgs>? OnCellRender { get; set; }
     }
 }

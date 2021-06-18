@@ -1,9 +1,12 @@
 ﻿@namespace BootstrapBlazor.Components
-@inherits RadioBase<SelectedItem>
+@inherits Checkbox<SelectedItem>
 
-<div class="@RadioClassString">
-    @foreach (var item in DataItems)
+<label @attributes="AdditionalAttributes" id="@Id" role="checkbox" aria-checked="@StateString" class="@ClassString" @onclick="@OnClickHandler">
+    <span class="radio-input">
+        <span class="@GetInnerClassString("radio-inner")"></span>
+    </span>
+    @if (ShowAfterLabel && !string.IsNullOrEmpty(DisplayText))
     {
-        <RadioElement Value="@item" DisplayText="@item.Text" IsDisabled="@IsDisabled" OnStateChanged="@OnChanged" />
+        <span class="checkbox-label">@DisplayText</span>
     }
-</div>
+</label>

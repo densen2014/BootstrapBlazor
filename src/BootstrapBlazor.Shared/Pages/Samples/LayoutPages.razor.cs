@@ -84,7 +84,7 @@ namespace BootstrapBlazor.Shared.Pages
 
         private Task OnFooterStateChanged(CheckboxState state, bool val) => UpdateAsync();
 
-        private async Task OnSideChanged(CheckboxState state, SelectedItem item)
+        private async Task OnSideChanged(IEnumerable<SelectedItem> values, SelectedItem item)
         {
             IsFullSide = item.Value == "left-right";
             await UpdateAsync();
@@ -93,19 +93,22 @@ namespace BootstrapBlazor.Shared.Pages
         private Task OnUseTabSetChanged(bool val) => UpdateAsync();
 
         /// <summary>
-        /// 
+        /// UpdateAsync 方法
         /// </summary>
         /// <returns></returns>
         public async Task UpdateAsync()
         {
-            await RootPage.SetParametersAsync(ParameterView.FromDictionary(new Dictionary<string, object?>()
+            var parameters = new Dictionary<string, object?>()
             {
                 [nameof(RootPage.IsFullSide)] = IsFullSide,
                 [nameof(RootPage.IsFixedFooter)] = IsFixedFooter && ShowFooter,
                 [nameof(RootPage.IsFixedHeader)] = IsFixedHeader,
                 [nameof(RootPage.ShowFooter)] = ShowFooter,
                 [nameof(RootPage.UseTabSet)] = UseTabSet
-            }));
+            };
+
+            // TODO: NET6.0 移除 ! 断言
+            await RootPage.SetParametersAsync(ParameterView.FromDictionary(parameters!));
 
             // 获得 Razor 示例代码
             RootPage.Update();

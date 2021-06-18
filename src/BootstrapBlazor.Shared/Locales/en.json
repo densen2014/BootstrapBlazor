@@ -92,7 +92,9 @@
     "Foo.Name": "Zhangsan {0}",
     "Foo.Address": "Lane {0} of Jinshajiang Road, Putuo District, Shanghai",
     "Foo.Address2": "Earth, China, Lane {0} of Jinshajiang Road, Putuo District, Shanghai. Here is an example of super long cell",
-    "Foo.BindValue": "BindValue"
+    "Foo.BindValue": "BindValue",
+    "True": "Pass",
+    "False": "Failed"
   },
   "BootstrapBlazor.Shared.Pages.ValidateForms.ComplexFoo": {
     "Name": "Name",
@@ -131,7 +133,8 @@
     "FlowText": "Workflow",
     "InstallAppText": "Install PWA App",
     "InstallText": "Install",
-    "CancelText": "Cancel"
+    "CancelText": "Cancel",
+    "Title": "View update log"
   },
   "BootstrapBlazor.Shared.Shared.NavMenu": {
     "GetStarted": "GETTINGSTARTED",
@@ -233,6 +236,7 @@
     "TableBase": "Base",
     "TableRow": "Row",
     "TableColumn": "Column",
+    "TableCell": "Cell",
     "TableDetail": "Detail",
     "TableSearch": "Search",
     "TableFilter": "Sort/Filter",
@@ -250,6 +254,7 @@
     "TableWrap": "Wrap",
     "TableTree": "Table-Tree",
     "TableLaoding": "Table-Loading",
+    "TableLookup": "Lookup",
     "MenuAccordion": "Accordion",
     "MenuExpandAll": "Expand",
     "Empty": "Empty",

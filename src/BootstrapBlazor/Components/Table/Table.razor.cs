@@ -104,6 +104,8 @@ namespace BootstrapBlazor.Components
             .AddClass("fa-rotate-90", ExpandRows.Contains(item))
             .Build();
 
+        private static string? GetColspan(int? colspan) => (colspan.HasValue && colspan.Value > 1) ? colspan.Value.ToString() : null;
+
         /// <summary>
         /// 明细行集合用于数据懒加载
         /// </summary>
@@ -338,6 +340,12 @@ namespace BootstrapBlazor.Components
         /// </summary>
         [Parameter]
         public RenderFragment<IEnumerable<TItem>>? TableFooter { get; set; }
+
+        /// <summary>
+        /// 获得/设置 Table Footer 模板
+        /// </summary>
+        [Parameter]
+        public RenderFragment<IEnumerable<TItem>>? FooterTemplate { get; set; }
 
         /// <summary>
         /// 获得/设置 数据集合，适用于无功能时仅做数据展示使用，高级功能时请使用 <see cref="OnQueryAsync"/> 回调委托
@@ -599,31 +607,43 @@ namespace BootstrapBlazor.Components
                     builder.CloseComponent();
                     return;
                 }
-                if (col.Formatter != null)
+                // 转化 Lookup 数据源
+                if (col.Lookup != null && val != null)
                 {
-                    // 格式化回调委托
-                    content = await col.Formatter(val);
-                }
-                else if (!string.IsNullOrEmpty(col.FormatString))
-                {
-                    // 格式化字符串
-                    content = Utility.Format(val, col.FormatString);
-                }
-                else if (col.PropertyType.IsEnum())
-                {
-                    content = col.PropertyType.ToDescriptionString(val?.ToString());
-                }
-                else if (col.PropertyType.IsDateTime())
-                {
-                    content = Utility.Format(val, CultureInfo.CurrentUICulture.DateTimeFormat);
-                }
-                else if (val is IEnumerable<object> v)
-                {
-                    content = string.Join(",", v);
+                    var lookupVal = col.Lookup.FirstOrDefault(l => l.Value.Equals(val.ToString(), StringComparison.OrdinalIgnoreCase));
+                    if (lookupVal != null)
+                    {
+                        content = lookupVal.Text;
+                    }
                 }
                 else
                 {
-                    content = val?.ToString() ?? "";
+                    if (col.Formatter != null)
+                    {
+                        // 格式化回调委托
+                        content = await col.Formatter(val);
+                    }
+                    else if (!string.IsNullOrEmpty(col.FormatString))
+                    {
+                        // 格式化字符串
+                        content = Utility.Format(val, col.FormatString);
+                    }
+                    else if (col.PropertyType.IsEnum())
+                    {
+                        content = col.PropertyType.ToDescriptionString(val?.ToString());
+                    }
+                    else if (col.PropertyType.IsDateTime())
+                    {
+                        content = Utility.Format(val, CultureInfo.CurrentUICulture.DateTimeFormat);
+                    }
+                    else if (val is IEnumerable<object> v)
+                    {
+                        content = string.Join(",", v);
+                    }
+                    else
+                    {
+                        content = val?.ToString() ?? "";
+                    }
                 }
                 builder.AddContent(0, content);
             }

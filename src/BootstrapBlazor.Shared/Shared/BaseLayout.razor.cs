@@ -16,6 +16,8 @@ namespace BootstrapBlazor.Shared.Shared
     /// </summary>
     public partial class BaseLayout
     {
+        private ElementReference MsLearnElement { get; set; }
+
         [Inject]
         [NotNull]
         private IStringLocalizer<BaseLayout>? Localizer { get; set; }
@@ -44,13 +46,16 @@ namespace BootstrapBlazor.Shared.Shared
         [NotNull]
         private string? CancelText { get; set; }
 
+        [NotNull]
+        private string? Title { get; set; }
+
         private static bool Installable = false;
 
         [NotNull]
         private static Action? OnInstallable { get; set; }
 
         /// <summary>
-        /// 
+        /// OnInitialized 方法
         /// </summary>
         /// <returns></returns>
         protected override void OnInitialized()
@@ -65,8 +70,23 @@ namespace BootstrapBlazor.Shared.Shared
             InstallAppText ??= Localizer[nameof(InstallAppText)];
             InstallText ??= Localizer[nameof(InstallText)];
             CancelText ??= Localizer[nameof(CancelText)];
-
+            Title ??= Localizer[nameof(Title)];
             OnInstallable = () => InvokeAsync(StateHasChanged);
+        }
+
+        /// <summary>
+        /// OnAfterRenderAsync 方法
+        /// </summary>
+        /// <param name="firstRender"></param>
+        /// <returns></returns>
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+
+            if (firstRender)
+            {
+                await JSRuntime.InvokeVoidAsync("$.bb_tooltip_site", MsLearnElement);
+            }
         }
 
         /// <summary>

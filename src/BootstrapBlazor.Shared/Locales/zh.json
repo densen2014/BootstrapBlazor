@@ -92,7 +92,9 @@
     "Foo.Name": "张三 {0}",
     "Foo.Address": "上海市普陀区金沙江路 {0} 弄",
     "Foo.Address2": "地球、中国、上海市普陀区金沙江路 {0} 弄 这里是超长单元格示例",
-    "Foo.BindValue": "绑定值"
+    "Foo.BindValue": "绑定值",
+    "True": "通过",
+    "False": "未通过"
   },
   "BootstrapBlazor.Shared.Pages.ValidateForms.ComplexFoo": {
     "Name": "姓名",
@@ -131,7 +133,8 @@
     "FlowText": "工作流",
     "InstallAppText": "安装小程序",
     "InstallText": "安装",
-    "CancelText": "取消"
+    "CancelText": "取消",
+    "Title": "点击查看更新日志"
   },
   "BootstrapBlazor.Shared.Shared.NavMenu": {
     "GetStarted": "快速上手",
@@ -233,6 +236,7 @@
     "TableBase": "基本功能",
     "TableRow": "行设置",
     "TableColumn": "列设置",
+    "TableCell": "单元格",
     "TableDetail": "明细行",
     "TableSearch": "搜索功能",
     "TableFilter": "筛选和排序",
@@ -250,6 +254,7 @@
     "TableWrap": "折行演示",
     "TableTree": "树形数据",
     "TableLaoding": "数据加载",
+    "TableLookup": "外键数据源",
     "MenuAccordion": "手风琴效果",
     "MenuExpandAll": "全部展开",
     "Empty": "空状态 Empty",

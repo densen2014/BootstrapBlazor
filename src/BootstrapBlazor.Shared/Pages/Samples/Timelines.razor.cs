@@ -69,10 +69,10 @@ namespace BootstrapBlazor.Shared.Pages
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="state"></param>
+        /// <param name="values"></param>
         /// <param name="value"></param>
 
-        public Task OnStateChanged(CheckboxState state, SelectedItem value)
+        public Task OnStateChanged(IEnumerable<SelectedItem> values, SelectedItem value)
         {
             IsReverse = value.Text == "倒序";
             StateHasChanged();
@@ -141,7 +141,7 @@ namespace BootstrapBlazor.Shared.Pages
             new TimelineItem
             {
                 Color = Color.Success,
-                Component = BootstrapDynamicComponent.CreateComponent<BootstrapBlazor.Components.Console>(new KeyValuePair<string, object?>[]
+                Component = BootstrapDynamicComponent.CreateComponent<BootstrapBlazor.Components.Console>(new KeyValuePair<string, object>[]
                 {
                     new(nameof(BootstrapBlazor.Components.Console.Items), Messages)
                 }),
