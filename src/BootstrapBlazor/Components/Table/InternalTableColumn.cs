@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace BootstrapBlazor.Components
 {
@@ -35,6 +35,11 @@ namespace BootstrapBlazor.Components
         public bool AllowTextWrap { get; set; }
 
         public bool TextEllipsis { get; set; }
+
+        /// <summary>
+        /// 获得/设置 是否不进行验证 默认为 false
+        /// </summary>
+        public bool SkipValidate { get; set; }
 
         public string? CssClass { get; set; }
 
@@ -102,7 +107,7 @@ namespace BootstrapBlazor.Components
         /// <param name="fieldName">字段名称</param>
         /// <param name="fieldType">字段类型</param>
         /// <param name="fieldText">显示文字</param>
-        public InternalTableColumn(string fieldName, Type fieldType, string fieldText)
+        public InternalTableColumn(string fieldName, Type fieldType, string? fieldText = null)
         {
             FieldName = fieldName;
             PropertyType = fieldType;
@@ -113,10 +118,23 @@ namespace BootstrapBlazor.Components
 
         public string GetFieldName() => FieldName;
 
-        public static IEnumerable<ITableColumn> GetProperties<TModel>(IEnumerable<ITableColumn>? source = null)
+        /// <summary>
+        /// 通过泛型模型获取模型属性集合
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IEnumerable<ITableColumn> GetProperties<TModel>(IEnumerable<ITableColumn>? source = null) => GetProperties(typeof(TModel), source);
+
+        /// <summary>
+        /// 通过特定类型模型获取模型属性集合
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IEnumerable<ITableColumn> GetProperties(Type type, IEnumerable<ITableColumn>? source = null)
         {
             var cols = new List<ITableColumn>(50);
-            var type = typeof(TModel);
             var attrModel = type.GetCustomAttribute<AutoGenerateClassAttribute>();
             var props = type.GetProperties();
             foreach (var prop in props)
@@ -209,6 +227,7 @@ namespace BootstrapBlazor.Components
             if (source.ShowTips) dest.ShowTips = source.ShowTips;
             if (source.Sortable) dest.Sortable = source.Sortable;
             if (source.TextEllipsis) dest.TextEllipsis = source.TextEllipsis;
+            if (source.SkipValidate) dest.SkipValidate = source.SkipValidate;
             if (source.Data != null) dest.Data = source.Data;
             if (source.Lookup != null) dest.Lookup = source.Lookup;
             if (source.Template != null)
@@ -220,6 +239,7 @@ namespace BootstrapBlazor.Components
             if (source.Width != null) dest.Width = source.Width;
             if (!string.IsNullOrEmpty(source.Text)) dest.Text = source.Text;
             if (source.Rows > 0) dest.Rows = source.Rows;
+            if (source.ComponentType != null) dest.ComponentType = source.ComponentType;
         }
     }
 }

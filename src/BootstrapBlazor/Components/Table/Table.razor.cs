@@ -53,7 +53,7 @@ namespace BootstrapBlazor.Components
         protected string? GetRowClassString(TItem item, string? css = null) => CssBuilder.Default(css)
             .AddClass(SetRowClassFormatter?.Invoke(item))
             .AddClass("active", CheckActive(item))
-            .AddClass("is-master", DetailRowTemplate != null)
+            .AddClass("is-master", ShowDetails())
             .AddClass("is-click", ClickToSelect)
             .AddClass("is-dblclick", DoubleClickToEdit)
             .Build();
@@ -129,13 +129,29 @@ namespace BootstrapBlazor.Components
         public Func<TItem, Task<IEnumerable<TItem>>>? OnTreeExpand { get; set; }
 
         /// <summary>
+        /// 获得/设置 是否有子节点回调方法 默认为 null 用于未提供 <see cref="HasChildrenColumnName"/> 列名时使用
+        /// </summary>
+        [Parameter]
+        public Func<TItem, bool>? HasChildrenCallback { get; set; }
+
+        /// <summary>
         /// 获得/设置 缩进大小 默认为 16 单位 px
         /// </summary>
         [Parameter]
         public int IndentSize { get; set; } = 16;
 
+        /// <summary>
+        /// 获得/设置 是否显示明细行 默认为 null 为空时使用 <see cref="DetailRowTemplate" /> 进行逻辑判断
+        /// </summary>
+        [Parameter]
+        public bool? IsDetails { get; set; }
+
         [NotNull]
         private string? NotSetOnTreeExpandErrorMessage { get; set; }
+
+        private bool ShowDetails() => IsDetails == null
+            ? DetailRowTemplate != null
+            : IsDetails.Value && DetailRowTemplate != null;
 
         private string GetIndentSize(TItem item)
         {
@@ -263,20 +279,24 @@ namespace BootstrapBlazor.Components
         /// <returns></returns>
         private bool CheckTreeChildren(TItem item)
         {
-            var invoker = GetPropertyCache.GetOrAdd((typeof(TItem), HasChildrenColumnName), key => LambdaExtensions.GetPropertyValueLambda<TItem, object>(item, key.PropertyName).Compile());
-            var v = invoker.Invoke(item);
             var ret = false;
-            if (v is bool b)
+            if (HasChildrenCallback != null)
             {
-                ret = b;
+                ret = HasChildrenCallback(item);
+            }
+            else
+            {
+                var invoker = GetPropertyCache.GetOrAdd((typeof(TItem), HasChildrenColumnName), key => LambdaExtensions.GetPropertyValueLambda<TItem, object>(item, key.PropertyName).Compile());
+                var v = invoker.Invoke(item);
+                if (v is bool b)
+                {
+                    ret = b;
+                }
             }
             return ret;
         }
 
-        #region Tree 树形数据获取 Items 方法集合
-        private IEnumerable<TItem> GetItems() => IsTree ? GetTreeRows() : Items;
-
-        private IEnumerable<TItem> GetTreeRows()
+        private List<TItem> GetTreeRows()
         {
             var ret = new List<TItem>();
             ReloadTreeNodes(ret, TreeRows);
@@ -295,12 +315,11 @@ namespace BootstrapBlazor.Components
                 }
             }
         }
-        #endregion
 
         /// <summary>
         /// 明细行集合用于数据懒加载
         /// </summary>
-        protected List<TItem> DetailRows { get; set; } = new List<TItem>();
+        protected List<TItem> DetailRows { get; } = new List<TItem>();
 
         /// <summary>
         /// 获得/设置 可过滤表格列集合
@@ -324,7 +343,7 @@ namespace BootstrapBlazor.Components
         public bool UseInjectDataService { get; set; }
 
         /// <summary>
-        /// 获得/设置 明细行模板
+        /// 获得/设置 明细行模板 <see cref="IsDetails" />
         /// </summary>
         [Parameter]
         public RenderFragment<TItem>? DetailRowTemplate { get; set; }
@@ -351,7 +370,7 @@ namespace BootstrapBlazor.Components
         /// 获得/设置 数据集合，适用于无功能时仅做数据展示使用，高级功能时请使用 <see cref="OnQueryAsync"/> 回调委托
         /// </summary>
         [Parameter]
-        public IEnumerable<TItem> Items { get; set; } = Enumerable.Empty<TItem>();
+        public IEnumerable<TItem>? Items { get; set; }
 
         /// <summary>
         /// 获得/设置 表格组件大小 默认为 Normal 正常模式
@@ -434,10 +453,37 @@ namespace BootstrapBlazor.Components
         public string ChildrenColumnName { get; set; } = "Children";
 
         /// <summary>
-        /// 获得设置 树形数据模式子项字段是否有子节点属性名称 默认为 HasChildren
+        /// 获得/设置 树形数据模式子项字段是否有子节点属性名称 默认为 HasChildren 无法提供时请设置 <see cref="HasChildrenCallback"/> 回调方法
         /// </summary>
         [Parameter]
         public string HasChildrenColumnName { get; set; } = "HasChildren";
+
+        /// <summary>
+        /// 获得/设置 动态数据上下文实例
+        /// </summary>
+        [Parameter]
+        public IDynamicObjectContext? DynamicContext { get; set; }
+
+        /// <summary>
+        /// 获得/设置 未设置排序时 tooltip 显示文字 默认点击升序
+        /// </summary>
+        [Parameter]
+        [NotNull]
+        public string? UnsetText { get; set; }
+
+        /// <summary>
+        /// 获得/设置 升序排序时 tooltip 显示文字 默认点击降序
+        /// </summary>
+        [Parameter]
+        [NotNull]
+        public string? SortAscText { get; set; }
+
+        /// <summary>
+        /// 获得/设置 降序排序时 tooltip 显示文字 默认取消排序
+        /// </summary>
+        [Parameter]
+        [NotNull]
+        public string? SortDescText { get; set; }
 
         /// <summary>
         /// OnInitialized 方法
@@ -466,7 +512,8 @@ namespace BootstrapBlazor.Components
 
             if (IsTree)
             {
-                TreeRows = Items.Select(item => new TableTreeNode<TItem>(item)
+                var rows = Items ?? QueryItems ?? Enumerable.Empty<TItem>();
+                TreeRows = rows.Select(item => new TableTreeNode<TItem>(item)
                 {
                     HasChildren = CheckTreeChildren(item)
                 }).ToList();
@@ -481,6 +528,41 @@ namespace BootstrapBlazor.Components
         protected bool FirstRender { get; set; } = true;
 
         private CancellationTokenSource? AutoRefreshCancelTokenSource { get; set; }
+
+        /// <summary>
+        /// OnParametersSet 方法
+        /// </summary>
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+
+            RowItemsCache = null;
+
+            if (!FirstRender)
+            {
+                // 动态列模式
+                if (DynamicContext != null && typeof(TItem).IsAssignableTo(typeof(IDynamicObject)))
+                {
+                    AutoGenerateColumns = false;
+
+                    var cols = DynamicContext.GetColumns();
+                    Columns.Clear();
+                    Columns.AddRange(cols);
+
+                    ColumnVisibles = Columns.Select(i => new ColumnVisibleItem { FieldName = i.GetFieldName(), Visible = i.Visible }).ToList();
+
+                    QueryItems = DynamicContext.GetItems().Cast<TItem>();
+                }
+
+                // set default sortName
+                var col = Columns.FirstOrDefault(i => i.Sortable && i.DefaultSort);
+                if (col != null)
+                {
+                    SortName = col.GetFieldName();
+                    SortOrder = col.DefaultSortOrder;
+                }
+            }
+        }
 
         /// <summary>
         /// OnAfterRenderAsync 方法
@@ -503,6 +585,16 @@ namespace BootstrapBlazor.Components
                 methodName = Height.HasValue ? "fixTableHeader" : "init";
 
                 ScreenSize = await RetrieveWidth();
+
+                // 动态列模式
+                if (DynamicContext != null && typeof(TItem).IsAssignableTo(typeof(IDynamicObject)))
+                {
+                    AutoGenerateColumns = false;
+
+                    var cols = DynamicContext.GetColumns();
+                    Columns.Clear();
+                    Columns.AddRange(cols);
+                }
 
                 // 初始化列
                 if (AutoGenerateColumns)
@@ -536,7 +628,7 @@ namespace BootstrapBlazor.Components
 
                 if (!string.IsNullOrEmpty(methodName))
                 {
-                    await JSRuntime.InvokeVoidAsync(TableElement, "bb_table", methodName);
+                    await JSRuntime.InvokeVoidAsync(TableElement, "bb_table", methodName, new { unset = UnsetText, sortAsc = SortAscText, sortDesc = SortDescText });
                     methodName = null;
                 }
 
@@ -580,6 +672,22 @@ namespace BootstrapBlazor.Components
             };
         }
 
+        /// <summary>
+        /// OnQueryAsync 查询结果数据集合
+        /// </summary>
+        private IEnumerable<TItem>? QueryItems { get; set; }
+
+        private Lazy<List<TItem>>? RowItemsCache { get; set; }
+
+        private List<TItem> RowItems
+        {
+            get
+            {
+                RowItemsCache ??= new(() => Items?.ToList() ?? QueryItems?.ToList() ?? new List<TItem>());
+                return IsTree ? GetTreeRows() : RowItemsCache.Value;
+            }
+        }
+
         #region 生成 Row 方法
         /// <summary>
         /// 获得 指定单元格数据方法
@@ -596,7 +704,9 @@ namespace BootstrapBlazor.Components
             else
             {
                 var content = "";
-                var val = Table<TItem>.GetItemValue(col.GetFieldName(), item);
+                var val = (item is IDynamicObject dynamicObject)
+                    ? dynamicObject.GetValue(col.GetFieldName())
+                    : Table<TItem>.GetItemValue(col.GetFieldName(), item);
 
                 // 自动化处理 bool 值
                 if (val is bool && col.ComponentType != null)
@@ -665,8 +775,12 @@ namespace BootstrapBlazor.Components
             return ret;
         }
 
-        private static readonly ConcurrentDictionary<(Type Type, string PropertyName), Func<TItem, object?>> GetPropertyCache = new();
+        private static ConcurrentDictionary<(Type Type, string PropertyName), Func<TItem, object?>> GetPropertyCache { get; } = new();
         #endregion
+
+        private RenderFragment RenderCell(ITableColumn col) => col.EditTemplate == null
+            ? builder => builder.CreateComponentByFieldType(this, col, EditModel)
+            : col.EditTemplate.Invoke(EditModel);
 
         /// <summary>
         /// Dispose 方法

@@ -12,12 +12,17 @@ namespace BootstrapBlazor.Components
     /// </summary>
     public class TreeItem
     {
-        private readonly List<TreeItem> _items = new List<TreeItem>(20);
+        private readonly List<TreeItem> _items = new(20);
 
         /// <summary>
         /// 获得 父级节点
         /// </summary>
         private TreeItem? Parent { get; set; }
+
+        /// <summary>
+        /// 获得/设置 是否显示正在加载动画 默认为 false
+        /// </summary>
+        public bool ShowLoading { get; set; }
 
         /// <summary>
         /// 获得/设置 子节点数据源
@@ -65,6 +70,11 @@ namespace BootstrapBlazor.Components
         /// 获得/设置 是否展开 默认 false 不展开
         /// </summary>
         public bool IsExpanded { get; set; }
+
+        /// <summary>
+        /// 获取/设置 是否有子节点 默认 false 
+        /// </summary>
+        public bool HasChildNode { get; set; }
 
         /// <summary>
         /// 添加 TreeItem 方法 由 TreeItem 方法加载时调用

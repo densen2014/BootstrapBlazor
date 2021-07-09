@@ -20,8 +20,15 @@ namespace BootstrapBlazor.Shared.Pages.Table
         [NotNull]
         private IStringLocalizer<Foo>? Localizer { get; set; }
 
+        [Inject]
+        [NotNull]
+        private IStringLocalizer<Tables>? TablesLocalizer { get; set; }
+
         [NotNull]
         private List<Foo>? Items { get; set; }
+
+        [NotNull]
+        private string? RefreshText { get; set; }
 
         /// <summary>
         /// OnInitialized 方法
@@ -30,6 +37,13 @@ namespace BootstrapBlazor.Shared.Pages.Table
         {
             base.OnInitialized();
 
+            Items = Foo.GenerateFoo(Localizer);
+
+            RefreshText ??= TablesLocalizer[nameof(RefreshText)];
+        }
+
+        private void OnClick()
+        {
             Items = Foo.GenerateFoo(Localizer);
         }
 
@@ -335,6 +349,13 @@ namespace BootstrapBlazor.Shared.Pages.Table
                 DefaultValue = "false"
             },
             new AttributeItem() {
+                Name = "IsDetails",
+                Description = "是否为明细行表格，未设置时使用 DetailRowTemplate 进行逻辑判断",
+                Type = "boolean",
+                ValueList = "true / false / null",
+                DefaultValue = "null"
+            },
+            new AttributeItem() {
                 Name = "ClickToSelect",
                 Description = "点击行即选中本行",
                 Type = "boolean",
@@ -358,6 +379,13 @@ namespace BootstrapBlazor.Shared.Pages.Table
             new AttributeItem() {
                 Name = "ShowSearch",
                 Description = "显示搜索栏",
+                Type = "boolean",
+                ValueList = "true / false",
+                DefaultValue = "false"
+            },
+            new AttributeItem() {
+                Name = "ShowSearchText",
+                Description = "显示搜索文本框",
                 Type = "boolean",
                 ValueList = "true / false",
                 DefaultValue = "false"
@@ -571,6 +599,27 @@ namespace BootstrapBlazor.Shared.Pages.Table
                 Type = "string",
                 ValueList = " — ",
                 DefaultValue = " — "
+            },
+            new AttributeItem() {
+                Name = "UnsetText",
+                Description = "未设置排序时 tooltip 显示文字",
+                Type = "string",
+                ValueList = " — ",
+                DefaultValue = "点击升序"
+            },
+            new AttributeItem() {
+                Name = "SortAscText",
+                Description = "升序排序时 tooltip 显示文字",
+                Type = "string",
+                ValueList = " — ",
+                DefaultValue = "点击降序"
+            },
+            new AttributeItem() {
+                Name = "SortDescText",
+                Description = "降序排序时 tooltip 显示文字",
+                Type = "string",
+                ValueList = " — ",
+                DefaultValue = "取消排序"
             },
             new AttributeItem() {
                 Name = "RenderModel",

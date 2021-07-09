@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -254,7 +253,7 @@ namespace BootstrapBlazor.Components
         /// 'class' attribute.
         /// </summary>
         protected string? CssClass => CssBuilder.Default()
-            .AddClass(FieldClass)
+            .AddClass(FieldClass, !SkipValidate)
             .AddClassFromAttributes(AdditionalAttributes)
             .Build();
 
@@ -271,7 +270,6 @@ namespace BootstrapBlazor.Components
             {
                 // This is the first run
                 // Could put this logic in OnInit, but its nice to avoid forcing people who override OnInit to call base.OnInit()
-
                 if (CascadedEditContext != null)
                 {
                     EditContext = CascadedEditContext;

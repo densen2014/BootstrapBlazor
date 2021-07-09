@@ -54,16 +54,22 @@ namespace BootstrapBlazor.Components
         public bool ShowSearch { get; set; }
 
         /// <summary>
-        /// 获得/设置 是否显示高级搜索按钮 默认显示
+        /// 获得/设置 是否显示搜索框 默认为 true 显示搜索文本框  <see cref="ShowSearch" />
         /// </summary>
         [Parameter]
-        public bool ShowAdvancedSearch { get; set; } = true;
+        public bool ShowSearchText { get; set; } = true;
 
         /// <summary>
-        /// 获得/设置 是否显示清空搜索按钮 默认显示
+        /// 获得/设置 是否显示清空搜索按钮 默认显示 <see cref="ShowSearch" />
         /// </summary>
         [Parameter]
         public bool ShowResetSearch { get; set; } = true;
+
+        /// <summary>
+        /// 获得/设置 是否显示高级搜索按钮 默认显示 <see cref="ShowSearch" />
+        /// </summary>
+        [Parameter]
+        public bool ShowAdvancedSearch { get; set; } = true;
 
         /// <summary>
         /// 获得/设置 搜索关键字 通过列设置的 Searchable 自动生成搜索拉姆达表达式
@@ -83,8 +89,15 @@ namespace BootstrapBlazor.Components
         protected async Task ResetSearchClick()
         {
             await ToggleLoading(true);
-            if (OnResetSearchAsync != null) await OnResetSearchAsync(SearchModel);
-            else if (SearchTemplate == null) Utility.Reset(SearchModel);
+            if (OnResetSearchAsync != null)
+            {
+                await OnResetSearchAsync(SearchModel);
+            }
+            else if (SearchTemplate == null)
+            {
+                Utility.Reset(SearchModel);
+            }
+
             PageIndex = 1;
             await QueryAsync();
             await ToggleLoading(false);
@@ -114,9 +127,13 @@ namespace BootstrapBlazor.Components
                 OnSearchClick = SearchClick
             };
 
-            var columns = Columns.Where(i => i.Searchable).ToList();
+            var columns = Columns.Where(i => i.Searchable || i.SearchTemplate != null).ToList();
             columns.ForEach(col => col.EditTemplate = col.SearchTemplate);
-            option.Items = columns;
+
+            if (columns.Any())
+            {
+                option.Items = columns;
+            }
 
             await DialogService.ShowSearchDialog(option);
         }

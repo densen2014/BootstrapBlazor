@@ -3,6 +3,7 @@
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Concurrent;
@@ -237,7 +238,8 @@ namespace BootstrapBlazor.Components
 
         private async Task OnSelectedRowsChanged()
         {
-            SelectedRows = SelectedItems;
+            var rows = new List<TItem>(SelectedItems);
+            SelectedRows = rows;
             if (SelectedRowsChanged.HasDelegate)
             {
                 await SelectedRowsChanged.InvokeAsync(SelectedRows);
@@ -303,90 +305,95 @@ namespace BootstrapBlazor.Components
         /// </summary>
         protected async Task QueryData()
         {
-            // https://gitee.com/LongbowEnterprise/BootstrapBlazor/issues/I29YK1
-            // 选中行目前不支持跨页 原因是选中行实例无法在翻页后保持
             SelectedItems.Clear();
+            RowItemsCache = null;
 
-            QueryData<TItem>? queryData = null;
-            var queryOption = new QueryPageOptions()
+            if (OnQueryAsync == null && DynamicContext != null && typeof(TItem).IsAssignableTo(typeof(IDynamicObject)))
             {
-                IsPage = IsPagination,
-                PageIndex = PageIndex,
-                PageItems = PageItems,
-                SearchText = SearchText,
-                SortOrder = SortOrder,
-                SortName = SortName,
-                Filters = Filters.Values,
-                Searchs = GetSearchs(),
-                SearchModel = SearchModel
-            };
-            if (OnQueryAsync != null)
-            {
-                queryData = await OnQueryAsync(queryOption);
+                QueryItems = DynamicContext.GetItems().Cast<TItem>();
             }
-            else if (UseInjectDataService)
+            else
             {
-                queryData = await GetDataService().QueryAsync(queryOption);
-            }
-
-            if (queryData != null)
-            {
-                Items = queryData.Items;
-                if (IsTree)
+                QueryData<TItem>? queryData = null;
+                var queryOption = new QueryPageOptions()
                 {
-                    KeySet.Clear();
-                    if (TableTreeNode<TItem>.HasKey)
+                    IsPage = IsPagination,
+                    PageIndex = PageIndex,
+                    PageItems = PageItems,
+                    SearchText = SearchText,
+                    SortOrder = SortOrder,
+                    SortName = SortName,
+                    Filters = Filters.Values,
+                    Searchs = GetSearchs(),
+                    SearchModel = SearchModel
+                };
+                if (OnQueryAsync != null)
+                {
+                    queryData = await OnQueryAsync(queryOption);
+                }
+                else if (UseInjectDataService)
+                {
+                    queryData = await GetDataService().QueryAsync(queryOption);
+                }
+
+                if (queryData != null)
+                {
+                    QueryItems = queryData.Items;
+                    if (IsTree)
                     {
-                        CheckExpandKeys(TreeRows);
-                    }
-                    if (KeySet.Count > 0)
-                    {
-                        TreeRows = new List<TableTreeNode<TItem>>();
-                        foreach (var item in Items)
+                        KeySet.Clear();
+                        if (TableTreeNode<TItem>.HasKey)
                         {
-                            var node = new TableTreeNode<TItem>(item)
+                            CheckExpandKeys(TreeRows);
+                        }
+                        if (KeySet.Count > 0)
+                        {
+                            TreeRows = new List<TableTreeNode<TItem>>();
+                            foreach (var item in QueryItems)
                             {
-                                HasChildren = CheckTreeChildren(item),
-                            };
-                            node.IsExpand = node.HasChildren && node.Key != null && KeySet.Contains(node.Key);
-                            if (node.IsExpand)
-                            {
-                                await RestoreIsExpand(node);
+                                var node = new TableTreeNode<TItem>(item)
+                                {
+                                    HasChildren = CheckTreeChildren(item),
+                                };
+                                node.IsExpand = node.HasChildren && node.Key != null && KeySet.Contains(node.Key);
+                                if (node.IsExpand)
+                                {
+                                    await RestoreIsExpand(node);
+                                }
+                                TreeRows.Add(node);
                             }
-                            TreeRows.Add(node);
+                        }
+                        else
+                        {
+                            TreeRows = QueryItems.Select(item => new TableTreeNode<TItem>(item)
+                            {
+                                HasChildren = CheckTreeChildren(item)
+                            }).ToList();
                         }
                     }
-                    else
+                    TotalCount = queryData.TotalCount;
+                    IsFiltered = queryData.IsFiltered;
+                    IsSorted = queryData.IsSorted;
+                    IsSearch = queryData.IsSearch;
+
+                    // 外部未过滤，内部自行过滤
+                    if (!IsFiltered && Filters.Any())
                     {
-                        TreeRows = Items.Select(item => new TableTreeNode<TItem>(item)
-                        {
-                            HasChildren = CheckTreeChildren(item)
-                        }).ToList();
+                        QueryItems = QueryItems.Where(Filters.Values.GetFilterFunc<TItem>());
+                        TotalCount = QueryItems.Count();
+                    }
+
+                    // 外部未处理排序，内部自行排序
+                    if (!IsSorted && SortOrder != SortOrder.Unset && !string.IsNullOrEmpty(SortName))
+                    {
+                        var invoker = SortLambdaCache.GetOrAdd(typeof(TItem), key => LambdaExtensions.GetSortLambda<TItem>().Compile());
+                        QueryItems = invoker(QueryItems, SortName, SortOrder);
                     }
                 }
-                TotalCount = queryData.TotalCount;
-                IsFiltered = queryData.IsFiltered;
-                IsSorted = queryData.IsSorted;
-                IsSearch = queryData.IsSearch;
-
-                // 外部未过滤，内部自行过滤
-                if (!IsFiltered && Filters.Any())
-                {
-                    Items = Items.Where(Filters.Values.GetFilterFunc<TItem>());
-                    TotalCount = Items.Count();
-                }
-
-                // 外部未处理排序，内部自行排序
-                if (!IsSorted && SortOrder != SortOrder.Unset && !string.IsNullOrEmpty(SortName))
-                {
-                    var invoker = SortLambdaCache.GetOrAdd(typeof(TItem), key => LambdaExtensions.GetSortLambda<TItem>().Compile());
-                    Items = invoker(Items, SortName, SortOrder);
-                }
             }
-
             if (SelectedRows != null)
             {
-                SelectedItems.AddRange(Items.Where(i => SelectedRows.Contains(i)));
+                SelectedItems.AddRange(RowItems.Where(i => SelectedRows.Contains(i)));
             }
         }
 
@@ -443,6 +450,12 @@ namespace BootstrapBlazor.Components
         /// </summary>
         /// <param name="item"></param>
         protected EventCallback<MouseEventArgs> ClickEditButtonCallback(TItem item) => EventCallback.Factory.Create<MouseEventArgs>(this, () => ClickEditButton(item));
+
+        private EventCallback<MouseEventArgs> ClickUpdateButtonCallback() => EventCallback.Factory.Create<MouseEventArgs>(this, async () =>
+        {
+            var context = new EditContext(EditModel);
+            await SaveAsync(context);
+        });
 
         /// <summary>
         /// 双击行回调此方法

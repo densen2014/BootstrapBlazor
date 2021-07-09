@@ -230,6 +230,7 @@ namespace BootstrapBlazor.Shared.Shared
                 },
                 new()
                 {
+                    IsUpdate = true,
                     Text = Localizer["DateTimePicker"],
                     Url = "datetimepickers"
                 },
@@ -310,7 +311,6 @@ namespace BootstrapBlazor.Shared.Shared
                 },
                 new()
                 {
-                    IsUpdate = true,
                     Text = Localizer["Upload"],
                     Url = "uploads"
                 },
@@ -485,7 +485,6 @@ namespace BootstrapBlazor.Shared.Shared
                 },
                 new()
                 {
-                    IsUpdate = true,
                     Text = Localizer["ChartDoughnut"],
                     Url = "charts/doughnut"
                 },
@@ -515,13 +514,11 @@ namespace BootstrapBlazor.Shared.Shared
                 },
                 new()
                 {
-                    IsNew = true,
                     Text = Localizer["TableCell"],
                     Url = "tables/cell"
                 },
                 new()
                 {
-                    IsNew = true,
                     Text = Localizer["TableLookup"],
                     Url = "tables/lookup"
                 },
@@ -537,6 +534,13 @@ namespace BootstrapBlazor.Shared.Shared
                 },
                 new()
                 {
+                    IsNew = true,
+                    Text = Localizer["TableDynamic"],
+                    Url = "tables/dynamic"
+                },
+                new()
+                {
+                    IsUpdate = true,
                     Text = Localizer["TableSearch"],
                     Url = "tables/search"
                 },
@@ -557,6 +561,7 @@ namespace BootstrapBlazor.Shared.Shared
                 },
                 new()
                 {
+                    IsUpdate = true,
                     Text = Localizer["TableFixColumn"],
                     Url = "tables/fix-column"
                 },
@@ -592,7 +597,6 @@ namespace BootstrapBlazor.Shared.Shared
                 },
                 new()
                 {
-                    IsNew = true,
                     Text = Localizer["TableFooter"],
                     Url = "tables/footer"
                 },

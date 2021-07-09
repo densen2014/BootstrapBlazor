@@ -75,6 +75,12 @@ namespace BootstrapBlazor.Components
         public bool IsBorderCard { get; set; }
 
         /// <summary>
+        /// 获得/设置 是否仅渲染 Active 标签
+        /// </summary>
+        [Parameter]
+        public bool IsOnlyRenderActiveTab { get; set; }
+
+        /// <summary>
         /// 获得/设置 组件高度 默认值为 0 高度自动
         /// </summary>
         [Parameter]
@@ -532,23 +538,23 @@ namespace BootstrapBlazor.Components
                     // 查找前面的 Tab
                     activeItem = _items.LastOrDefault();
                 }
-                if (activeItem != null)
+            }
+            if (activeItem != null)
+            {
+                if (ClickTabToNavigation)
                 {
-                    if (ClickTabToNavigation)
-                    {
-                        Navigator.NavigateTo(activeItem.Url!);
-                    }
-                    else
-                    {
-                        activeItem.SetActive(true);
-                        StateHasChanged();
-                    }
+                    Navigator.NavigateTo(activeItem.Url!);
                 }
                 else
                 {
-                    // 无标签
+                    activeItem.SetActive(true);
                     StateHasChanged();
                 }
+            }
+            else
+            {
+                // 无标签
+                StateHasChanged();
             }
         }
 

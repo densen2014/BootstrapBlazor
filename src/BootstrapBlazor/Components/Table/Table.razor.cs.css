@@ -396,8 +396,16 @@
     border-spacing: 0;
 }
 
-    .table-fixed-column .table tr:not(:hover) .fixed {
+    .table-fixed-column .table .fixed {
         background-color: #fff;
+    }
+
+    .table-fixed-column .table .thead-light .fixed {
+        background-color: #e9ecef;
+    }
+
+    .table-fixed-column .table .thead-dark .fixed {
+        background-color: #343a40;
     }
 
     .table-fixed-column .table tr .fixed {
@@ -507,4 +515,34 @@
 
 .table .table-cell.is-tree {
     cursor: pointer;
+}
+
+.table-cell.is-incell {
+    margin: -7px -9px;
+}
+
+    .table-cell.is-incell .switch {
+        height: 35px;
+        padding-left: 9px;
+    }
+
+.table-sm .table-cell.is-incell {
+    margin: -.25rem;
+}
+
+    .table-sm .table-cell.is-incell .form-control {
+        height: calc(1.5em + .75rem -3px);
+    }
+
+    .table-sm .table-cell.is-incell .switch {
+        height: 30px;
+        padding-left: 4px;
+    }
+
+.table-bordered thead td, .table-bordered thead th {
+    border-bottom-width: 1px;
+}
+
+.table-bordered thead tr:last-child td, .table-bordered thead tr:last-child th {
+    border-bottom-width: 2px;
 }

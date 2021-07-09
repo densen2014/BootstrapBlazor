@@ -56,6 +56,11 @@
     "ShowBarUsageText": "With Bar",
     "IntroText4": "Show <code>Tip</code>"
   },
+  "BootstrapBlazor.Shared.Pages.DateTimePickers": {
+    "SubmitText": "Save",
+    "ModelValidateValue": "ModelValidateValue",
+    "ModelValidateValue.Required": "{0} is required."
+  },
   "BootstrapBlazor.Shared.Pages.Selects": {
     "PlaceHolder": "Not Select"
   },
@@ -238,6 +243,7 @@
     "TableColumn": "Column",
     "TableCell": "Cell",
     "TableDetail": "Detail",
+    "TableDynamic": "Dynamic",
     "TableSearch": "Search",
     "TableFilter": "Sort/Filter",
     "TableFixHeader": "FixHeader",
@@ -301,5 +307,14 @@
     "Left": "Left",
     "Center": "Center",
     "Right": "Right"
+  },
+  "BootstrapBlazor.Shared.Pages.Table.TablesDetailRow": {
+    "DetailTextTrue": "Enable",
+    "DetailTextFalse": "Disable"
+  },
+  "BootstrapBlazor.Shared.Pages.Table.Tables": {
+    "RefreshText": "Refresh",
+    "ButtonAddColumnText": "Add Column",
+    "ButtonRemoveColumnText": "Remove Column"
   }
 }

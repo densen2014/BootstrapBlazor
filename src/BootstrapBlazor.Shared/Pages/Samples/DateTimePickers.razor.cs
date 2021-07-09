@@ -4,8 +4,12 @@
 
 using BootstrapBlazor.Shared.Common;
 using BootstrapBlazor.Shared.Pages.Components;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace BootstrapBlazor.Shared.Pages
@@ -15,39 +19,46 @@ namespace BootstrapBlazor.Shared.Pages
     /// </summary>
     public sealed partial class DateTimePickers
     {
-        /// <summary>
-        /// 
-        /// </summary>
         private TimeSpan SpanValue { get; set; } = DateTime.Now.Subtract(DateTime.Today);
 
-        /// <summary>
-        /// 
-        /// </summary>
         private string SpanValue2 { get; set; } = DateTime.Now.ToString("HH:mm:ss");
 
-        /// <summary>
-        /// 
-        /// </summary>
+        [NotNull]
         private Logger? DateLogger { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        [NotNull]
         private Logger? TimeLogger { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        [NotNull]
         private Logger? DateTimeLogger { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         private DateTime? BindValue { get; set; } = DateTime.Today;
 
         private DateTime? BindNullValue { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [Required]
+        public DateTime? ModelValidateValue { get; set; }
+
+        private string? SubmitText { get; set; }
+
         private string GetNullValueString => BindNullValue.HasValue ? BindNullValue.Value.ToString("yyyy-MM-dd") : "空值";
+
+        [Inject]
+        [NotNull]
+        private IStringLocalizer<DateTimePickers>? Localizer { get; set; }
+
+        /// <summary>
+        /// OnInitialized 方法
+        /// </summary>
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            SubmitText ??= Localizer[nameof(SubmitText)];
+        }
 
         /// <summary>
         /// 
@@ -77,7 +88,7 @@ namespace BootstrapBlazor.Shared.Pages
         /// <param name="d"></param>
         private Task DateValueChanged(DateTime d)
         {
-            DateLogger?.Log($"选择的日期为: {d:yyyy-MM-dd}");
+            DateLogger.Log($"选择的日期为: {d:yyyy-MM-dd}");
             return Task.CompletedTask;
         }
 
@@ -94,7 +105,7 @@ namespace BootstrapBlazor.Shared.Pages
         /// <param name="d"></param>
         private void TimeValueChanged(TimeSpan d)
         {
-            TimeLogger?.Log($"选择的时间为: {d:hh\\:mm\\:ss}");
+            TimeLogger.Log($"选择的时间为: {d:hh\\:mm\\:ss}");
         }
 
         /// <summary>
@@ -104,7 +115,6 @@ namespace BootstrapBlazor.Shared.Pages
         private Task DateTimeValueChanged(DateTime? d)
         {
             BindValue = d;
-            DateTimeLogger?.Log($"选择的时间为: {d:yyyy-MM-dd}");
             return Task.CompletedTask;
         }
 
