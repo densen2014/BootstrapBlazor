@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <Version>5.0.38</Version>
+    <Version>5.1.1</Version>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
@@ -30,6 +30,7 @@
     <Content Remove="wwwroot\**\*.*" />
     <Content Include="wwwroot\css\bootstrap.blazor.bundle.min.css" />
     <Content Include="wwwroot\js\bootstrap.blazor.bundle.min.js" />
+    <Content Include="wwwroot\lib\animate\animate.min.css" />
     <Content Include="wwwroot\lib\summernote\font\*.*" />
     <None Include="bundleconfig.json" />
     <None Include="wwwroot\**\*.*" />
